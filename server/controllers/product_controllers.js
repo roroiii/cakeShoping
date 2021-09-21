@@ -13,46 +13,109 @@ const makeError = (code, message) => ({
 });
 
 const productControllers = {
+  // 獲取商品總數
   getAllList: (req, res) => {
-    productModel.getAllList((err, result) => {
-      if (err) {
-        console.log(`getAllLimit error：${err.toString()}`);
-        res.status(403);
-        return res.json(makeError(ERROR_CODE.INVALID, "取得商品總數失敗"));
-      }
-      const allLimit = result[0]["COUNT(*)"];
-      res.status(200);
-      return res.json({ ok: 1, allLimit });
-    });
-  },
-  getAll: (req, res) => {
-    const { page, limit } = req.query;
-    productModel.getAll(page, limit, (err, result) => {
-      if (err) {
-        console.log(`getAll error：${err.toString()}`);
-        res.status(403);
-        return res.json(makeError(ERROR_CODE.INVALID, "取得商品列表失敗"));
-      }
-      res.status(200);
-      return res.json({ ok: 1, result });
-    });
-  },
-  add: (req, res) => {
-    const { productName, price, type, articlel, isShow } = req.body;
-    if (!productName || !price || !type || !articlel || !isShow) {
-      console.log("add error1: 新增商品資料不齊全");
-      res.status(400);
-      return res.json(makeError(ERROR_CODE.INVALID, "新增商品資料不齊全"));
+    try {
+      productModel.getAllList((err, result) => {
+        if (err) {
+          console.log(`getAllLimit error：${err.toString()}`);
+          res.status(403);
+          return res.json(makeError(ERROR_CODE.INVALID, "取得商品總數失敗"));
+        }
+        const allLimit = result[0]["COUNT(*)"];
+        res.status(200);
+        return res.json({ ok: 1, allLimit });
+      });
+    } catch (error) {
+      console.log("ctl product getAllList catchERROR ：", error);
+      res.status(404);
+      return res.json({
+        ok: 0,
+        message: `ctl product getAllList catchERROR：${error}`,
+      });
     }
-    productModel.add({ productName, price, type, articlel, isShow }, (err) => {
-      if (err) {
-        console.log(`add error2: ${err.toString()}`);
-        res.status(403);
-        return res.json(makeError(ERROR_CODE.DUPLICATED, "新增商品失敗"));
+  },
+  // 拿取全部商品
+  getAll: (req, res) => {
+    try {
+      productModel.getAll((err, result) => {
+        if (err) {
+          console.log(`getAll error：${err.toString()}`);
+          res.status(403);
+          return res.json(makeError(ERROR_CODE.INVALID, "取得商品列表失敗"));
+        }
+        res.status(200);
+        return res.json({ ok: 1, result });
+      });
+    } catch (error) {
+      console.log("ctl product getAll catchERROR ：", error);
+      res.status(404);
+      return res.json({
+        ok: 0,
+        message: `ctl product getAll catchERROR：${error}`,
+      });
+    }
+  },
+  // 拿取單一商品
+  getOne: (req, res) => {
+    try {
+      const { id } = req.params;
+      productModel.getOne(id, (err, result) => {
+        if (err) {
+          console.log(`getOne error：${err.toString()}`);
+          res.status(403);
+          return res.json(makeError(ERROR_CODE.INVALID, "取得單一商品失敗"));
+        }
+        res.status(200);
+        return res.json({ ok: 1, result });
+      });
+    } catch (error) {
+      console.log("ctl product getOne catchERROR ：", error);
+      res.status(404);
+      return res.json({
+        ok: 0,
+        message: `ctl product getOne catchERROR：${error}`,
+      });
+    }
+  },
+  // 新增商品
+  add: (req, res) => {
+    try {
+      const { productName, price, type, articlel, isShow, storage, sell } =
+        req.body;
+      if (
+        !productName ||
+        !price ||
+        !type ||
+        !articlel ||
+        !isShow ||
+        !storage ||
+        !sell
+      ) {
+        console.log("add error1: 新增商品資料不齊全");
+        res.status(400);
+        return res.json(makeError(ERROR_CODE.INVALID, "新增商品資料不齊全"));
       }
-      res.status(200);
-      return res.json({ ok: 1 });
-    });
+      productModel.add(
+        { productName, price, type, articlel, isShow, storage, sell },
+        (err) => {
+          if (err) {
+            console.log(`add error2: ${err.toString()}`);
+            res.status(403);
+            return res.json(makeError(ERROR_CODE.DUPLICATED, "新增商品失敗"));
+          }
+          res.status(200);
+          return res.json({ ok: 1 });
+        }
+      );
+    } catch (error) {
+      console.log("ctl product add catchERROR ：", error);
+      res.status(404);
+      return res.json({
+        ok: 0,
+        message: `ctl product add catchERROR：${error}`,
+      });
+    }
   },
 };
 

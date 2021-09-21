@@ -20,22 +20,31 @@ const makeError = (code, message) => ({
 const utilsControllers = {
   // 驗證jwt token
   verification: (req, res, next) => {
-    let authHeader = req.headers["authorization"] || "";
-    const token = authHeader.replace("Bearer ", "");
-    let jwtData;
-
     try {
-      jwtData = jwt.verify(token, jwtSecretKey);
-    } catch (err) {
-      console.log(`jwt比對錯誤：${err.toString()}`);
-    }
+      let authHeader = req.headers["authorization"] || "";
+      const token = authHeader.replace("Bearer ", "");
+      let jwtData;
 
-    if (!jwtData) {
-      res.status(401);
-      return res.json(makeError(ERROR_CODE.UNAUTHORIZED, "驗證失敗"));
+      try {
+        jwtData = jwt.verify(token, jwtSecretKey);
+      } catch (err) {
+        console.log(`jwt比對錯誤：${err.toString()}`);
+      }
+
+      if (!jwtData) {
+        res.status(401);
+        return res.json(makeError(ERROR_CODE.UNAUTHORIZED, "驗證失敗"));
+      }
+      req.jwtData = jwtData;
+      next();
+    } catch (error) {
+      console.log("ctl utils verification catchERROR ：", error);
+      res.status(404);
+      return res.json({
+        ok: 0,
+        message: `ctl utils verification catchERROR：${error}`,
+      });
     }
-    req.jwtData = jwtData;
-    next();
   },
 };
 
