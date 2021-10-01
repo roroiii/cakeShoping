@@ -1,6 +1,5 @@
 const bcrypt = require("bcrypt");
 const userModel = require("../models/user");
-const adminModel = require("../models/admin");
 const jwt = require("jsonwebtoken");
 const salRounds = 10;
 
@@ -73,38 +72,6 @@ const usersControllers = {
         console.log("login error1: 登入資料不齊全");
         res.status(400);
         return res.json(makeError(ERROR_CODE.INVALID, "登入資料不齊全"));
-      }
-      if (username === "admin") {
-        adminModel.login(username, (err, admindata) => {
-          if (err) {
-            console.log(`login error2: ${err.toString()}`);
-            res.status(500);
-            return res.json(makeError(ERROR_CODE.INVALID, "登入失敗"));
-          }
-          if (!userdata) {
-            res.status(200);
-            return res.json(makeError(ERROR_CODE.INVALID, "帳號或密碼錯誤"));
-          }
-          bcrypt.compare(password, admindata.password, (err, isSucess) => {
-            if (err || !isSucess) {
-              res.status(200);
-              return res.json(makeError(ERROR_CODE.INVALID, "帳號或密碼錯誤"));
-            }
-            const options = { expiresIn: "7 day" };
-            res.status(200);
-            return res.json({
-              ok: 1,
-              token: jwt.sign(
-                {
-                  username: req.body.username,
-                  role: "admin",
-                },
-                jwtSecretKey,
-                options
-              ),
-            });
-          });
-        });
       }
       userModel.login(username, (err, userdata) => {
         if (err) {

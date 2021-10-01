@@ -117,6 +117,52 @@ const productControllers = {
       });
     }
   },
+  // 刪除商品
+  delete: (req, res) => {
+    try {
+      const { id } = req.params;
+      productModel.delete(id, (err) => {
+        if (err) {
+          console.log(`delete error2: ${err.toString()}`);
+          res.status(403);
+          return res.json(makeError(ERROR_CODE.DUPLICATED, "刪除商品失敗"));
+        }
+        res.status(200);
+        return res.json({ ok: 1 });
+      });
+    } catch (error) {
+      console.log("ctl product delete catchERROR ：", error);
+      res.status(404);
+      return res.json({
+        ok: 0,
+        message: `ctl product delete catchERROR：${error}`,
+      });
+    }
+  },
+  // 變更上架、下架狀態
+  status: (req, res) => {
+    try {
+      const { status, id } = req.body;
+      productModel.status(status, id, (err) => {
+        if (err) {
+          console.log(`status error2: ${err.toString()}`);
+          res.status(403);
+          return res.json(
+            makeError(ERROR_CODE.DUPLICATED, "上架或下架商品失敗")
+          );
+        }
+        res.status(200);
+        return res.json({ ok: 1 });
+      });
+    } catch (error) {
+      console.log("ctl product status catchERROR ：", error);
+      res.status(404);
+      return res.json({
+        ok: 0,
+        message: `ctl product status catchERROR：${error}`,
+      });
+    }
+  },
 };
 
 module.exports = productControllers;

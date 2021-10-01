@@ -4,6 +4,7 @@ const usersControllers = require("../controllers/users_controllers");
 const utilsControllers = require("../controllers/utils_controllers");
 const productControllers = require("../controllers/product_controllers");
 const photoControllers = require("../controllers/photo_controllers");
+const adminControllers = require("../controllers/admin_controllers");
 
 const router = express.Router();
 
@@ -20,6 +21,8 @@ const upload = multer({
     cb(null, true);
   },
 });
+
+router.post("/admain-login", adminControllers.handleLogin);
 
 router.post("/register", usersControllers.handleRegister);
 
@@ -38,6 +41,10 @@ router.get("/product", productControllers.getAll);
 router.get("/product/:id", productControllers.getOne);
 
 router.post("/product", productControllers.add);
+
+router.delete("/product/:id", productControllers.delete);
+
+router.post("/product-status", productControllers.status);
 
 router.post("/photo", upload.array("avatar"), photoControllers.upload);
 

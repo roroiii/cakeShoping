@@ -51,6 +51,36 @@ const productModel = {
       cb(error);
     }
   },
+  delete: (id, cb) => {
+    try {
+      db.query(
+        "UPDATE products SET isDeleted = 1 WHERE id = ?",
+        [id],
+        (err) => {
+          if (err) return cb(err);
+          return cb(null);
+        }
+      );
+    } catch (error) {
+      console.log("models product delete catchERROR ：", error);
+      cb(error);
+    }
+  },
+  status: (status, id, cb) => {
+    try {
+      db.query(
+        "UPDATE products SET isShow = ? WHERE id = ?",
+        [status, id],
+        (err) => {
+          if (err) return cb(err);
+          return cb(null);
+        }
+      );
+    } catch (error) {
+      console.log("models product status catchERROR ：", error);
+      cb(error);
+    }
+  },
 };
 
 module.exports = productModel;
