@@ -5,6 +5,8 @@ const utilsControllers = require("../controllers/utils_controllers");
 const productControllers = require("../controllers/product_controllers");
 const photoControllers = require("../controllers/photo_controllers");
 const adminControllers = require("../controllers/admin_controllers");
+const orderControllers = require("../controllers/order_controllers");
+const orderModel = require("../models/order");
 
 const router = express.Router();
 
@@ -51,6 +53,12 @@ router.post("/photo", upload.array("avatar"), photoControllers.upload);
 router.get("/photo", photoControllers.getAll);
 
 router.get("/photo/:id", photoControllers.getOne);
+
+router.get("/order/:uuid", orderControllers.getOrder);
+
+router.get("/order", orderControllers.getAll);
+
+router.patch("/order", orderControllers.update);
 
 router.use((req, res) => {
   res.status(404).send("404 Not found");
