@@ -163,6 +163,45 @@ const productControllers = {
       });
     }
   },
+  // 編輯商品
+  update: (req, res) => {
+    try {
+      const { id, productName, price, type, articlel, isShow, storage, sell } =
+        req.body;
+      if (
+        !productName ||
+        !price ||
+        !type ||
+        !articlel ||
+        !isShow ||
+        !storage ||
+        !sell
+      ) {
+        console.log("update error1: 編輯商品資料不齊全");
+        res.status(400);
+        return res.json(makeError(ERROR_CODE.INVALID, "編輯商品資料不齊全"));
+      }
+      productModel.update(
+        { id, productName, price, type, articlel, isShow, storage, sell },
+        (err) => {
+          if (err) {
+            console.log(`update error2: ${err.toString()}`);
+            res.status(403);
+            return res.json(makeError(ERROR_CODE.DUPLICATED, "編輯商品失敗"));
+          }
+          res.status(200);
+          return res.json({ ok: 1 });
+        }
+      );
+    } catch (error) {
+      console.log("ctl product update catchERROR ：", error);
+      res.status(404);
+      return res.json({
+        ok: 0,
+        message: `ctl product update catchERROR：${error}`,
+      });
+    }
+  },
 };
 
 module.exports = productControllers;

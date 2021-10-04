@@ -24,7 +24,7 @@ const upload = multer({
   },
 });
 
-router.post("/admain-login", adminControllers.handleLogin);
+router.post("/admain", adminControllers.handleLogin);
 
 router.post("/register", usersControllers.handleRegister);
 
@@ -36,8 +36,6 @@ router.patch("/user", usersControllers.update);
 
 router.post("/verification", utilsControllers.verification);
 
-router.get("/productList", productControllers.getAllList);
-
 router.get("/product", productControllers.getAll);
 
 router.get("/product/:id", productControllers.getOne);
@@ -46,7 +44,9 @@ router.post("/product", productControllers.add);
 
 router.delete("/product/:id", productControllers.delete);
 
-router.post("/product-status", productControllers.status);
+router.patch("/product", productControllers.update);
+
+router.post("/product/status", productControllers.status);
 
 router.post("/photo", upload.array("avatar"), photoControllers.upload);
 
@@ -56,7 +56,11 @@ router.get("/photo/:id", photoControllers.getOne);
 
 router.get("/order/:uuid", orderControllers.getOrder);
 
-router.get("/order", orderControllers.getAll);
+router.get("/order/user/:id", orderControllers.getUserAll);
+
+router.get("/order/all", orderControllers.getAll);
+
+router.get("/order", orderControllers.getPage);
 
 router.patch("/order", orderControllers.update);
 

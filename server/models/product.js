@@ -81,6 +81,21 @@ const productModel = {
       cb(error);
     }
   },
+  update: (param, cb) => {
+    try {
+      db.query(
+        "UPDATE products SET productName = ?, price = ?, type = ?, articlel = ?, isShow = ?, storage = ?, sell = ? WHERE id = ?",
+        [productName, price, type, articlel, isShow, storage, sell, id],
+        (err) => {
+          if (err) return cb(err);
+          return cb(null);
+        }
+      );
+    } catch (error) {
+      console.log("models product update catchERROR ：", error);
+      cb(error);
+    }
+  },
 };
 
 module.exports = productModel;

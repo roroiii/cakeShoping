@@ -12,13 +12,58 @@ const makeError = (code, message) => ({
 });
 
 const orderControllers = {
-  // 拿取該會員全部訂單
+  // 拿到該頁訂單
+  getPage: (req, res) => {
+    try {
+      const { page, limit } = req.query;
+      const startId = (Number(page) - 1) * Number(limit) + 1;
+      const endId = startId + Number(limit);
+      orderModel.getPage(startId, endId, (err, result) => {
+        if (err) {
+          console.log(`getPage error：${err.toString()}`);
+          res.status(403);
+          return res.json(makeError(ERROR_CODE.INVALID, "取得該頁訂單失敗"));
+        }
+        res.status(200);
+        return res.json({ ok: 1, result: result[0] });
+      });
+    } catch (error) {
+      console.log("ctl order getPage catchERROR :", error);
+      res.status(404);
+      return res.json({
+        ok: 0,
+        message: `ctl order getPage catchERROR：${error}`,
+      });
+    }
+  },
+  // 獲取訂單總筆數
   getAll: (req, res) => {
     try {
-      const { userId } = req.query;
-      orderModel.getAll(userId, (err, result) => {
+      orderModel.getAll((err, count) => {
         if (err) {
           console.log(`getAll error：${err.toString()}`);
+          res.status(403);
+          return res.json(makeError(ERROR_CODE.INVALID, "取得訂單總筆數失敗"));
+        }
+        res.status(200);
+        return res.json({ ok: 1, count });
+      });
+    } catch (error) {
+      console.log("ctl order getAll catchERROR :", error);
+      res.status(404);
+      return res.json({
+        ok: 0,
+        message: `ctl order getAll catchERROR：${error}`,
+      });
+    }
+  },
+  // 拿取該會員全部訂單
+  getUserAll: (req, res) => {
+    try {
+      const { userId } = req.query;
+      orderModel.getUserAll(userId, (err, result) => {
+        if (err) {
+          console.log(`getUserAll error：${err.toString()}`);
           res.status(403);
           return res.json(
             makeError(ERROR_CODE.INVALID, "取得會員全部訂單失敗")
@@ -28,11 +73,11 @@ const orderControllers = {
         return res.json({ ok: 1, result });
       });
     } catch (error) {
-      console.log("ctl order getAll catchERROR :", error);
+      console.log("ctl order getUserAll catchERROR :", error);
       res.status(404);
       return res.json({
         ok: 0,
-        message: `ctl order getAll catchERROR：${error}`,
+        message: `ctl order getUserAll catchERROR：${error}`,
       });
     }
   },
