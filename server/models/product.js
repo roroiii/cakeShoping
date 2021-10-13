@@ -83,6 +83,8 @@ const productModel = {
   },
   update: (param, cb) => {
     try {
+      const { id, productName, price, type, articlel, isShow, storage, sell } =
+        param;
       db.query(
         "UPDATE products SET productName = ?, price = ?, type = ?, articlel = ?, isShow = ?, storage = ?, sell = ? WHERE id = ?",
         [productName, price, type, articlel, isShow, storage, sell, id],

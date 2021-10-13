@@ -169,6 +169,7 @@ const productControllers = {
       const { id, productName, price, type, articlel, isShow, storage, sell } =
         req.body;
       if (
+        !id ||
         !productName ||
         !price ||
         !type ||

@@ -64,6 +64,8 @@ router.get("/order", orderControllers.getPage);
 
 router.patch("/order", orderControllers.update);
 
+router.post("/order", orderControllers.add);
+
 router.use((req, res) => {
   res.status(404).send("404 Not found");
 });

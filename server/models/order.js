@@ -65,6 +65,105 @@ const orderModel = {
       cb(error);
     }
   },
+  getStorage: (productList, cb) => {
+    try {
+      let sql = "SELECT * FROM products WHERE ";
+      let sqlWhere = "";
+      let sqlValues = [];
+      for (let i = 0; i < productList.length; i++) {
+        if (i == productList.length - 1) {
+          sqlWhere += "id = ?";
+          sqlValues.push(productList[i].productId);
+          break;
+        }
+        sqlWhere += "id = ? OR ";
+        sqlValues.push(productList[i].productId);
+      }
+      sql += sqlWhere;
+      db.query(sql, sqlValues, (err, result) => {
+        console.log(result);
+        if (err) return cb(err);
+        return cb(null, result);
+      });
+    } catch (error) {
+      console.log("models order getStorage catchERROR ：", error);
+      cb(error);
+    }
+  },
+  renew: (renewArr, cb) => {
+    try {
+      let sql = "REPLACE INTO photo (id,storage,sell) values ";
+      let sqlValues = "";
+      let sqlWhere = [];
+      for (let i = 0; i < renewArr.length; i++) {
+        if (i == renewArr.length - 1) {
+          sqlValues += "(?, ?, ?)";
+          sqlWhere.push(renewArr[i].id);
+          sqlWhere.push(renewArr[i].storage);
+          sqlWhere.push(renewArr[i].sell);
+          break;
+        }
+        sqlValues += "(?, ?, ?), ";
+        sqlWhere.push(renewArr[i].id);
+        sqlWhere.push(renewArr[i].storage);
+        sqlWhere.push(renewArr[i].sell);
+      }
+      sql += sqlValues;
+      db.query(sql, sqlWhere, (err) => {
+        if (err) return cb(err);
+        return cb(null);
+      });
+    } catch (error) {
+      console.log("modles order renew catchERROR ：", error);
+      cb(error);
+    }
+  },
+  add: (orderid, userId, totalPrice, cb) => {
+    try {
+      db.query(
+        "INSERT INTO order(orderid, userId, status, totalPrice) VALUES(?, ?, ?, ?)",
+        [orderid, userId, 0, totalPrice],
+        (err) => {
+          if (err) return cb(err);
+          return cb(null);
+        }
+      );
+    } catch (error) {
+      console.log("modles order add catchERROR ：", error);
+      cb(error);
+    }
+  },
+  addop: (orderid, productList, cb) => {
+    try {
+      let sql =
+        "INSERT INTO order_products(orderid, productId, count, unitPrice) VALUES ";
+      let sqlValues = "";
+      let sqlWhere = [];
+      for (let i = 0; i < productList.length; i++) {
+        if (i == productList.length - 1) {
+          sqlValues += `(?, ?, ?, ?)`;
+          sqlWhere.push(orderid);
+          sqlWhere.push(productList[i].productId);
+          sqlWhere.push(productList[i].count);
+          sqlWhere.push(productList[i].unitPrice);
+          break;
+        }
+        sqlValues += `(?, ?, ?, ?), `;
+        sqlWhere.push(orderid);
+        sqlWhere.push(productList[i].productId);
+        sqlWhere.push(productList[i].count);
+        sqlWhere.push(productList[i].unitPrice);
+      }
+      sql += sqlValues;
+      db.query(sql, sqlWhere, (err) => {
+        if (err) return cb(err);
+        return cb(null);
+      });
+    } catch (error) {
+      console.log("modles order addop catchERROR ：", error);
+      cb(error);
+    }
+  },
 };
 
 module.exports = orderModel;

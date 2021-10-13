@@ -52,6 +52,35 @@ const photoModel = {
       cb(error);
     }
   },
+  update: (result, updateList, productId, cb) => {
+    try {
+      if (result.length != updateList.length) {
+        return cb("err: 更新圖片發生錯誤");
+      }
+      let sql = "REPLACE INTO photo (id,url) values ";
+      let sqlValues = "";
+      let sqlWhere = [];
+      for (let i = 0; i < result.length; i++) {
+        if (i == result.length - 1) {
+          sqlValues += "(?, ?)";
+          sqlWhere.push(updateList[i]);
+          sqlWhere.push(result[i]);
+          break;
+        }
+        sqlValues += "(?, ?), ";
+        sqlWhere.push(updateList[i]);
+        sqlWhere.push(result[i]);
+      }
+      sql += sqlValues;
+      db.query(sql, sqlWhere, (err) => {
+        if (err) return cb(err);
+        return cb(null);
+      });
+    } catch (error) {
+      console.log("modles photo update catchERROR ：", error);
+      cb(error);
+    }
+  },
 };
 
 module.exports = photoModel;

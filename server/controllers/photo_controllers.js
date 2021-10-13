@@ -18,6 +18,7 @@ const photoControllers = {
   upload: (req, res) => {
     try {
       const { productId } = req.body;
+
       if (req.files === undefined || req.files.length === 0) {
         console.log("upload error : no images found");
         res.status(403);
@@ -103,6 +104,54 @@ const photoControllers = {
       return res.json({
         ok: 0,
         message: `ctl photo getOne catchERROR：${error}`,
+      });
+    }
+  },
+  update: (req, res) => {
+    try {
+      const { productId, updateList } = req.body;
+      if (req.files === undefined || req.files.length === 0) {
+        console.log("upload error : no images found");
+        res.status(403);
+        return res.json(makeError(ERROR_CODE.INVALID, "no images found"));
+      }
+      const encodedFiles = req.files.map((file) => {
+        return file.buffer.toString("base64");
+      });
+      const imageUpload = new Promise((resolve, reject) => {
+        let result = imgurUpload(encodedFiles);
+        try {
+          resolve(result);
+        } catch (error) {
+          reject(error);
+        }
+      })
+        .then((result) => {
+          photoModel.update(result, updateList, productId, (err) => {
+            if (err) {
+              console.log("upload error：", err.toString());
+              res.status(403);
+              return res.json(
+                makeError(ERROR_CODE.INVALID, "Failed to write data")
+              );
+            }
+            res.status(200);
+            return res.json({ ok: 1 });
+          });
+        })
+        .catch((err) => {
+          console.log("imageUpdate error：", err);
+          res.status(500);
+          return res.json(
+            makeError(ERROR_CODE.INVALID, "Failed to write to imgur")
+          );
+        });
+    } catch (error) {
+      console.log("ctl photo update catchERROR ：", error);
+      res.status(404);
+      return res.json({
+        ok: 0,
+        message: `ctl photo update catchERROR：${error}`,
       });
     }
   },
