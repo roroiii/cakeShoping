@@ -7,11 +7,11 @@ import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
+import CartDrawer from './CartDrawer';
 import MenuIcon from '@mui/icons-material/Menu';
 import PersonAddAlt1OutlinedIcon from '@mui/icons-material/PersonAddAlt1Outlined';
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
 import BakeryDiningOutlinedIcon from '@mui/icons-material/BakeryDiningOutlined';
-import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
 
 export default function Nav() {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -19,10 +19,6 @@ export default function Nav() {
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
-
-  const handleProfileMenuOpen = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
 
   const handleMobileMenuClose = () => {
     setMobileMoreAnchorEl(null);
@@ -63,7 +59,7 @@ export default function Nav() {
     return (
       <>
         <Link href={`/about`}>
-          <MenuItem>
+          <MenuItem href={`/about`}>
             <IconButton
               size="small"
               edge="end"
@@ -96,7 +92,7 @@ export default function Nav() {
               aria-label="account of current user"
               aria-controls={menuId}
               aria-haspopup="true"
-              onClick={handleProfileMenuOpen}
+              // onClick={handleProfileMenuOpen}
               color="inherit"
             >
               <PersonOutlineOutlinedIcon />
@@ -104,19 +100,7 @@ export default function Nav() {
             <p>會員中心</p>
           </MenuItem>
         </Link>
-        <Link href={`/cart`}>
-          <MenuItem>
-            <IconButton
-              size="small"
-              edge="end"
-              aria-label="show 4 new mails"
-              color="inherit"
-            >
-              <ShoppingCartOutlinedIcon />
-            </IconButton>
-            <p>購物車({0})</p>
-          </MenuItem>
-        </Link>
+        <CartDrawer />
       </>
     );
   };
@@ -136,22 +120,66 @@ export default function Nav() {
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
     >
-      <MenuListItem />
+      <Link href={`/about`}>
+        <MenuItem href={`/about`}>
+          <IconButton
+            size="small"
+            edge="end"
+            aria-label="about"
+            color="inherit"
+          >
+            <BakeryDiningOutlinedIcon />
+          </IconButton>
+          <p>關於我們</p>
+        </MenuItem>
+      </Link>
+      <Link href={`/register`}>
+        <MenuItem>
+          <IconButton
+            size="small"
+            edge="end"
+            aria-label="register"
+            color="inherit"
+          >
+            <PersonAddAlt1OutlinedIcon />
+          </IconButton>
+          <p>加入會員</p>
+        </MenuItem>
+      </Link>
+      <Link href={`/member`}>
+        <MenuItem>
+          <IconButton
+            size="small"
+            edge="end"
+            aria-label="account of current user"
+            aria-controls={menuId}
+            aria-haspopup="true"
+            // onClick={handleProfileMenuOpen}
+            color="inherit"
+          >
+            <PersonOutlineOutlinedIcon />
+          </IconButton>
+          <p>會員中心</p>
+        </MenuItem>
+      </Link>
     </Menu>
   );
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static">
+      <AppBar
+        position="static"
+        sx={{ bgcolor: 'white.main', color: 'black.main' }}
+      >
         <Toolbar>
           <Link href={`/`}>
             <Typography
               variant="h6"
               noWrap
               component="div"
-              sx={{ display: { sm: 'block' } }}
+              sx={{ display: { sm: 'block' }, cursor: 'pointer' }}
             >
-              CAKESHOP 蛋糕很香
+              CAKESHOP
             </Typography>
           </Link>
           <Box sx={{ flexGrow: 1 }} />
@@ -159,6 +187,15 @@ export default function Nav() {
             <MenuListItem />
           </Box>
           <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
+            <MenuItem>
+              <IconButton
+                size="small"
+                edge="end"
+                aria-label="shop cart"
+                color="inherit"
+              ></IconButton>
+              <CartDrawer />
+            </MenuItem>
             <IconButton
               size="large"
               aria-label="open drawer"
@@ -174,7 +211,7 @@ export default function Nav() {
         </Toolbar>
       </AppBar>
       {renderMobileMenu}
-      {renderMenu}
+      {/* {renderMenu} */}
     </Box>
   );
 }

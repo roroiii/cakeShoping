@@ -1,6 +1,7 @@
 import Nav from './Nav';
 import Meta from './Meta';
-import Header from './Header';
+// import Header from './Header';
+import Footer from './Footer';
 import styled from 'styled-components';
 
 const Container = styled.div`
@@ -29,10 +30,11 @@ const Layout = ({ children }) => {
       <Nav />
       <Container>
         <Main>
-          <Header />
+          {/* <Header /> */}
           {children}
         </Main>
       </Container>
+      <Footer />
     </>
   );
 };
