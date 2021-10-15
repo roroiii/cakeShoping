@@ -128,6 +128,7 @@ const orderControllers = {
       });
     }
   },
+  // 建立訂單
   add: (req, res) => {
     const { userId, totalPrice, productList } = req.body.order;
 

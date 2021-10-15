@@ -32,11 +32,11 @@ const userModel = {
       cb(error);
     }
   },
-  getUser: (id, userId, cb) => {
+  getUser: (id, cb) => {
     try {
       db.query(
-        "SELECT id, username, email, realName, phone FROM users WHERE id = ? AND userId = ?",
-        [id, userId],
+        "SELECT id, username, email, realName, phone FROM users WHERE id = ?",
+        [id],
         (err, result) => {
           if (err) return cb(err);
           cb(null, result);
@@ -49,10 +49,10 @@ const userModel = {
   },
   update: (param, cb) => {
     try {
-      const { id, userId, email, realName, phone } = param;
+      const { id, email, realName, phone } = param;
       db.query(
-        "UPDATE users SET email = ?, realName = ?, phone = ? WHERE id = ? AND userId = ?",
-        [email, realName, phone, id, userId],
+        "UPDATE users SET email = ?, realName = ?, phone = ? WHERE id = ?",
+        [email, realName, phone, id],
         (err) => {
           if (err) return cb(err);
           cb(null);
