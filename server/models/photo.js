@@ -43,7 +43,7 @@ const photoModel = {
   },
   getOne: (id, cb) => {
     try {
-      db.query("SELECT * FROM photos WHERE id = ?", [id], (err, result) => {
+      db.query("SELECT * FROM photos WHERE productid = ?", [id], (err, result) => {
         if (err) return cb(err);
         cb(null, result);
       });

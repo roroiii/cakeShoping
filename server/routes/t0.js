@@ -97,7 +97,7 @@ router.patch("/product", requireLogin, onlyAdmin, productControllers.update);
 
 router.post("/product/status", requireLogin, onlyAdmin, productControllers.status);
 
-router.post("/photo", upload.array("avatar"), photoControllers.upload);
+router.post("/photo", requireLogin, onlyAdmin, upload.array("avatar"), photoControllers.upload);
 
 router.get("/photo", photoControllers.getAll);
 

@@ -31,7 +31,7 @@ const adminControllers = {
         res.status(500);
         return res.json(makeError(ERROR_CODE.INVALID, "登入失敗"));
       }
-      if (!userdata) {
+      if (!admindata) {
         res.status(200);
         return res.json(makeError(ERROR_CODE.INVALID, "帳號或密碼錯誤"));
       }
