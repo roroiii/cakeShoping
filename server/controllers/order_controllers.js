@@ -130,7 +130,8 @@ const orderControllers = {
   },
   // 建立訂單
   add: (req, res) => {
-    const { userId, totalPrice, productList } = req.body.order;
+    const { userId, totalPrice, productList, name, phone, address, email } =
+      req.body.order;
 
     const handleAddOrder = new Promise((resolve, reject) => {
       // 比對庫存量是否足夠
@@ -156,33 +157,27 @@ const orderControllers = {
         }
         return resolve(renewArr);
       });
-    }) // 更新庫存量、銷售量
-      .then((renewArr) => {
-        orderModel.renew(renewArr, (err) => {
-          if (err) {
-            return Promise.reject({ error: "更新庫存、銷售量失敗" });
-          }
-          return;
-        });
-      }) // 寫入 order 表
+    });
+    handleAddOrder
+      .then(async (renewArr) => {
+        // 更新庫存量、銷售量
+        return renewPromise(renewArr);
+      })
       .then(() => {
         const orderid = uuidv4();
-        orderModel.add(orderid, userId, totalPrice, (err) => {
-          if (err) {
-            return Promise.reject({ error: "新增訂單失敗" });
-          }
-          return orderid;
-        });
-      }) // 寫入 order_products 表
+        // 寫入 order 表
+        return addPromise(orderid, userId, totalPrice);
+      })
       .then((orderid) => {
-        orderModel.addop(orderid, productList, (err) => {
-          if (err) {
-            return Promise.reject({ error: "新增商品銷售紀錄失敗" });
-          }
-          return orderid;
-        });
-      }) // 訂單新增完成 回傳responce
+        // 寫入 order_products 表
+        return addopPromise(orderid, productList);
+      })
       .then((orderid) => {
+        // 寫入 recipients 表
+        return recipientPromise(orderid, name, phone, address);
+      })
+      .then((orderid) => {
+        // 訂單新增完成 回傳responce
         res.status(200);
         return res.json({ ok: 1, orderId: orderid });
       })
@@ -192,4 +187,44 @@ const orderControllers = {
       });
   },
 };
+function renewPromise(renewArr) {
+  return new Promise((res, rej) => {
+    orderModel.renew(renewArr, (err) => {
+      if (err) {
+        return rej({ error: "更新庫存、銷售量失敗" });
+      }
+      res();
+    });
+  });
+}
+function addPromise(orderid, userId, totalPrice) {
+  return new Promise((res, rej) => {
+    orderModel.add(orderid, userId, totalPrice, (err) => {
+      if (err) {
+        return rej({ error: "新增訂單失敗" });
+      }
+      return res(orderid);
+    });
+  });
+}
+function addopPromise(orderid, productList) {
+  return new Promise((res, rej) => {
+    orderModel.addop(orderid, productList, (err) => {
+      if (err) {
+        return rej({ error: "新增商品銷售紀錄失敗" });
+      }
+      return res(orderid);
+    });
+  });
+}
+function recipientPromise(orderid, name, phone, address) {
+  return new Promise((res, rej) => {
+    orderModel.addRecipient({ orderid, name, phone, address, email }, (err) => {
+      if (err) {
+        return rej({ error: "新增購買者訂購資料失敗" });
+      }
+      return res(orderid);
+    });
+  });
+}
 module.exports = orderControllers;

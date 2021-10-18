@@ -164,6 +164,22 @@ const orderModel = {
       cb(error);
     }
   },
+  addRecipient: (param, cb) => {
+    try {
+      const { orderid, name, phone, address, email } = param;
+      db.query(
+        "INSERT INTO recipients(name, phone, email, address, orderId) VALUES(?, ?, ?, ?, ?)",
+        [name, phone, email, address, orderid],
+        (err) => {
+          if (err) return cb(err);
+          return cb(null);
+        }
+      );
+    } catch (error) {
+      console.log("modles order addRecipient catchERROR ：", error);
+      cb(error);
+    }
+  },
 };
 
 module.exports = orderModel;
