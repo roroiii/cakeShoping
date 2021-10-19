@@ -9,9 +9,17 @@ import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
 import CartDrawer from './CartDrawer';
 import MenuIcon from '@mui/icons-material/Menu';
+import styled from 'styled-components';
 import PersonAddAlt1OutlinedIcon from '@mui/icons-material/PersonAddAlt1Outlined';
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
 import BakeryDiningOutlinedIcon from '@mui/icons-material/BakeryDiningOutlined';
+
+const CakeToolbar = styled(Toolbar)`
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0;
+`;
 
 export default function Nav() {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -171,13 +179,17 @@ export default function Nav() {
         position="static"
         sx={{ bgcolor: 'white.main', color: 'black.main' }}
       >
-        <Toolbar>
+        <CakeToolbar>
           <Link href={`/`}>
             <Typography
               variant="h6"
               noWrap
               component="div"
-              sx={{ display: { sm: 'block' }, cursor: 'pointer' }}
+              sx={{
+                display: { sm: 'block' },
+                cursor: 'pointer',
+                padding: '6px 16px',
+              }}
             >
               CAKESHOP
             </Typography>
@@ -208,7 +220,7 @@ export default function Nav() {
               <MenuIcon />
             </IconButton>
           </Box>
-        </Toolbar>
+        </CakeToolbar>
       </AppBar>
       {renderMobileMenu}
       {/* {renderMenu} */}
