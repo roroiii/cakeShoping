@@ -10,7 +10,7 @@ import Typography from '@mui/material/Typography';
 import ProjectCard from '../components/ProjectCard';
 import Divider from '@mui/material/Divider';
 
-const CardSilder = styled.div`
+const CardSlider = styled.div`
   display: flex;
 `;
 
@@ -25,7 +25,7 @@ export default function Home({ articles }) {
       <h1>HOME</h1>
       <Button>prev</Button>
       <Button>next</Button>
-      <CardSilder>
+      <CardSlider>
         <Card sx={{ maxWidth: 600 }}>
           <CardMedia
             component="img"
@@ -42,7 +42,7 @@ export default function Home({ articles }) {
             alt="green iguana"
           />
         </Card>
-      </CardSilder>
+      </CardSlider>
       <Typography
         variant="body"
         color="text.secondary"

@@ -1,5 +1,4 @@
-import { useState } from 'react';
-import Link from 'next/link';
+import { useState, useEffect } from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -13,6 +12,7 @@ import styled from 'styled-components';
 import PersonAddAlt1OutlinedIcon from '@mui/icons-material/PersonAddAlt1Outlined';
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
 import BakeryDiningOutlinedIcon from '@mui/icons-material/BakeryDiningOutlined';
+import Link from 'next/link';
 
 const CakeToolbar = styled(Toolbar)`
   max-width: 1200px;
@@ -63,11 +63,12 @@ export default function Nav() {
   );
 
   const mobileMenuId = 'primary-search-account-menu-mobile';
+
   const MenuListItem = () => {
     return (
       <>
         <Link href={`/about`}>
-          <MenuItem href={`/about`}>
+          <MenuItem>
             <IconButton
               size="small"
               edge="end"
@@ -199,15 +200,13 @@ export default function Nav() {
             <MenuListItem />
           </Box>
           <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
-            <MenuItem>
-              <IconButton
-                size="small"
-                edge="end"
-                aria-label="shop cart"
-                color="inherit"
-              ></IconButton>
-              <CartDrawer />
-            </MenuItem>
+            <IconButton
+              size="small"
+              edge="end"
+              aria-label="shop cart"
+              color="inherit"
+            ></IconButton>
+            <CartDrawer />
             <IconButton
               size="large"
               aria-label="open drawer"
