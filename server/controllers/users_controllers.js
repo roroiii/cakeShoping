@@ -96,6 +96,7 @@ const usersControllers = {
               {
                 username: req.body.username,
                 userId: userdata.userId,
+                id: userdata.id,
                 role: "user",
               },
               jwtSecretKey,
@@ -116,8 +117,8 @@ const usersControllers = {
   // 拿取會員資料
   getUser: (req, res) => {
     try {
-      const { id, userId } = req.body;
-      userModel.getUser(id, userId, (err, result) => {
+      const { id } = req.jwtData;
+      userModel.getUser(id, (err, result) => {
         if (err) {
           console.log("user getUser error：", err.toString());
           res.status(403);
@@ -138,8 +139,9 @@ const usersControllers = {
   // 編輯會員資料
   update: (req, res) => {
     try {
-      const { id, userId, email, realName, phone } = req.body;
-      const param = { id, userId, email, realName, phone };
+      const { email, realName, phone } = req.body;
+      const { id } = req.jwtData
+      const param = { id, email, realName, phone };
       userModel.update(param, (err) => {
         if (err) {
           console.log("user update error：", err.toString());

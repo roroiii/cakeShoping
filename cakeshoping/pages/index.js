@@ -1,42 +1,57 @@
-import { server } from '../config';
-import styled from 'styled-components';
+import { useState, useEffect } from 'react';
 import Meta from '../components/Meta';
 import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
-import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
-import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
+import ProjectCard from '../components/ProjectCard';
+import Divider from '@mui/material/Divider';
+import Box from '@mui/material/Box';
+import { getProductsAndOnePhoto } from '../api/ProductAPI';
 
-const CardSilder = styled.div`
-  display: flex;
-`;
-
-export default function Home({ articles }) {
+export default function Home({ productAndOnePhoto }) {
   return (
     <div>
       <Meta />
-      <h1>HOME</h1>
-      <Button>prev</Button>
-      <Button>next</Button>
-      <CardSilder>
-        <Card sx={{ maxWidth: 600 }}>
+      <Box sx={{ display: 'flex' }}>
+        <Card sx={{ maxWidth: 1200, height: 350 }}>
           <CardMedia
             component="img"
-            height="140"
-            image="https://picsum.photos/600"
+            height="auto"
+            image="https://picsum.photos/1200"
             alt="green iguana"
           />
         </Card>
-        <Card sx={{ maxWidth: 600 }}>
-          <CardMedia
-            component="img"
-            height="140"
-            image="https://picsum.photos/600"
-            alt="green iguana"
-          />
-        </Card>
-      </CardSilder>
+      </Box>
+      <Typography
+        variant="body"
+        color="text.secondary"
+        sx={{ display: 'block', pt: 2 }}
+      >
+        本月甜點
+      </Typography>
+      <Divider sx={{ pt: 1, mb: 2 }} />
+      <Box
+        sx={{
+          display: 'flex',
+          flexWrap: { xs: 'wrap', md: 'wrap', lg: 'wrap' },
+          justifyContent: 'space-around',
+          marginLeft: '-16px',
+          marginRight: '-16px',
+        }}
+      >
+        {productAndOnePhoto.map((cake) => (
+          <ProjectCard key={cake.id} cake={cake} />
+        ))}
+      </Box>
     </div>
   );
 }
+
+export const getStaticProps = async () => {
+  const productAndOnePhoto = await getProductsAndOnePhoto();
+  return {
+    props: {
+      productAndOnePhoto: productAndOnePhoto || null,
+    },
+  };
+};

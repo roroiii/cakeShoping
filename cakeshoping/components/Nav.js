@@ -1,5 +1,4 @@
-import { useState } from 'react';
-import Link from 'next/link';
+import { useState, useEffect } from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -9,9 +8,18 @@ import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
 import CartDrawer from './CartDrawer';
 import MenuIcon from '@mui/icons-material/Menu';
+import styled from 'styled-components';
 import PersonAddAlt1OutlinedIcon from '@mui/icons-material/PersonAddAlt1Outlined';
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
 import BakeryDiningOutlinedIcon from '@mui/icons-material/BakeryDiningOutlined';
+import Link from 'next/link';
+
+const CakeToolbar = styled(Toolbar)`
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0;
+`;
 
 export default function Nav() {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -55,11 +63,12 @@ export default function Nav() {
   );
 
   const mobileMenuId = 'primary-search-account-menu-mobile';
+
   const MenuListItem = () => {
     return (
       <>
         <Link href={`/about`}>
-          <MenuItem href={`/about`}>
+          <MenuItem>
             <IconButton
               size="small"
               edge="end"
@@ -171,13 +180,17 @@ export default function Nav() {
         position="static"
         sx={{ bgcolor: 'white.main', color: 'black.main' }}
       >
-        <Toolbar>
+        <CakeToolbar>
           <Link href={`/`}>
             <Typography
               variant="h6"
               noWrap
               component="div"
-              sx={{ display: { sm: 'block' }, cursor: 'pointer' }}
+              sx={{
+                display: { sm: 'block' },
+                cursor: 'pointer',
+                padding: '6px 16px',
+              }}
             >
               CAKESHOP
             </Typography>
@@ -187,15 +200,13 @@ export default function Nav() {
             <MenuListItem />
           </Box>
           <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
-            <MenuItem>
-              <IconButton
-                size="small"
-                edge="end"
-                aria-label="shop cart"
-                color="inherit"
-              ></IconButton>
-              <CartDrawer />
-            </MenuItem>
+            <IconButton
+              size="small"
+              edge="end"
+              aria-label="shop cart"
+              color="inherit"
+            ></IconButton>
+            <CartDrawer />
             <IconButton
               size="large"
               aria-label="open drawer"
@@ -208,7 +219,7 @@ export default function Nav() {
               <MenuIcon />
             </IconButton>
           </Box>
-        </Toolbar>
+        </CakeToolbar>
       </AppBar>
       {renderMobileMenu}
       {/* {renderMenu} */}
