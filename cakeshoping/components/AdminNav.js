@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -14,7 +14,7 @@ import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined
 import BakeryDiningOutlinedIcon from '@mui/icons-material/BakeryDiningOutlined';
 import Link from 'next/link';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectAdminUser, adminLogout } from '../features/adminUserSlice';
+import { selectAdminUser } from '../features/adminUserSlice';
 import { useRouter } from 'next/router';
 
 const CakeToolbar = styled(Toolbar)`

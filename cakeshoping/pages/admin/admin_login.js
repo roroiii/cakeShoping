@@ -1,12 +1,10 @@
-import { useState, useEffect } from 'react';
-// import { adminLogin } from '../../api/AdminAPI';
-import { setAdminAuthToken } from '../../utils/token';
+import { useState } from 'react';
 import { useRouter } from 'next/router';
 import Login from '../../components/Login';
 import { adminLogin } from '../../features/adminUserSlice';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
-export default function Home({ login }) {
+export default function Home() {
   const dispatch = useDispatch();
   const router = useRouter();
   const [username, setUsername] = useState('');
@@ -69,12 +67,3 @@ export default function Home({ login }) {
     />
   );
 }
-
-// export const getStaticProps = async () => {
-//   const login = await adminLogin();
-//   return {
-//     props: {
-//       login: login || null,
-//     },
-//   };
-// };
