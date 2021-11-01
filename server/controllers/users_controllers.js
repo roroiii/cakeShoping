@@ -36,7 +36,7 @@ const usersControllers = {
         const userId = Math.random().toString("16").replace(".", "");
         userModel.addUser(
           { username, password: hash, realName, email, phone, userId },
-          (err) => {
+          (err, data) => {
             if (err) {
               console.log(`register error2: ${err.toString()}`);
               res.status(403);
@@ -47,7 +47,12 @@ const usersControllers = {
             return res.json({
               ok: 1,
               token: jwt.sign(
-                { username: req.body.username, userId, role: "user" },
+                {
+                  username: req.body.username,
+                  userId,
+                  id: data.insertId,
+                  role: "user",
+                },
                 jwtSecretKey,
                 options
               ),
@@ -140,7 +145,7 @@ const usersControllers = {
   update: (req, res) => {
     try {
       const { email, realName, phone } = req.body;
-      const { id } = req.jwtData
+      const { id } = req.jwtData;
       const param = { id, email, realName, phone };
       userModel.update(param, (err) => {
         if (err) {

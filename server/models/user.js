@@ -9,7 +9,7 @@ const userModel = {
         [username, password, email, realName, phone, userId],
         (err, result) => {
           if (err) return cb(err);
-          cb(null);
+          cb(null, result);
         }
       );
     } catch (error) {
