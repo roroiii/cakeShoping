@@ -83,7 +83,7 @@ router.get("/user", requireLogin, onlyUser, usersControllers.getUser);
 
 router.patch("/user", requireLogin, onlyUser, usersControllers.update);
 
-router.post("/verification", utilsControllers.verification);
+router.post("/me", utilsControllers.verification);
 
 router.get("/product", productControllers.getAll);
 
