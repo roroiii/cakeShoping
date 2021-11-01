@@ -2,7 +2,7 @@ import Layout from '../components/Layout';
 import '../styles/globals.css';
 import { ThemeProvider } from '@mui/material/styles';
 import theme from '../src/theme';
-import store from './redux/store';
+import store from '../redux/store';
 import { Provider } from 'react-redux';
 
 function MyApp({ Component, pageProps }) {

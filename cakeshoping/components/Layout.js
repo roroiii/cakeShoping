@@ -1,8 +1,14 @@
+import { useEffect } from 'react';
 import Nav from './Nav';
+import AdminNav from './AdminNav';
 import Meta from './Meta';
 // import Header from './Header';
 import Footer from './Footer';
 import styled from 'styled-components';
+import { useSelector, useDispatch } from 'react-redux';
+import { selectAdminUser } from '../features/adminUserSlice';
+import { getAdmin } from '../api/AdminAPI.js';
+import { getAdminAuthToken } from '../utils/token';
 
 const Container = styled.div`
   max-width: 1200px;
@@ -27,10 +33,22 @@ const Main = styled.main`
 `;
 
 const Layout = ({ children }) => {
+  const adminUser = useSelector(selectAdminUser);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    // 應該要有 token 才做
+    if (getAdminAuthToken() !== '') {
+      // getAdmin().then((res) => {
+      //   console.log(res);
+      // });
+    }
+  }, []);
+
   return (
     <>
       <Meta />
-      <Nav />
+      {adminUser === '' && <Nav />}
+      {adminUser && <adminNav />}
       <Container>
         <Main>
           {/* <Header /> */}
