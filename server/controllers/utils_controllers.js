@@ -19,7 +19,7 @@ const makeError = (code, message) => ({
 
 const utilsControllers = {
   // 驗證jwt token
-  verification: (req, res, next) => {
+  verification: (req, res) => {
     try {
       let authHeader = req.headers["authorization"] || "";
       const token = authHeader.replace("Bearer ", "");
