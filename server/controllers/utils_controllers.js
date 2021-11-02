@@ -19,7 +19,7 @@ const makeError = (code, message) => ({
 
 const utilsControllers = {
   // 驗證jwt token
-  verification: (req, res, next) => {
+  verification: (req, res) => {
     try {
       let authHeader = req.headers["authorization"] || "";
       const token = authHeader.replace("Bearer ", "");
@@ -35,8 +35,14 @@ const utilsControllers = {
         res.status(401);
         return res.json(makeError(ERROR_CODE.UNAUTHORIZED, "驗證失敗"));
       }
-      req.jwtData = jwtData;
-      next();
+      if (jwtData.role === "user") {
+        res.status(200);
+        return res.json({ ok: 1, role: "user", username: jwtData.username });
+      }
+      if (jwtData.role === "admin") {
+        res.status(200);
+        return res.json({ ok: 1, role: "admin", username: jwtData.username });
+      }
     } catch (error) {
       console.log("ctl utils verification catchERROR ：", error);
       res.status(404);
