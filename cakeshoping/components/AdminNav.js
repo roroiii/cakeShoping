@@ -24,13 +24,13 @@ const CakeToolbar = styled(Toolbar)`
   padding: 0;
 `;
 
-export default function Nav() {
+export default function AdminNav() {
   const adminUser = useSelector(selectAdminUser);
   const dispatch = useDispatch();
   const router = useRouter();
   const [anchorEl, setAnchorEl] = useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
-  console.log(adminUser);
+
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
@@ -83,7 +83,7 @@ export default function Nav() {
             >
               <BakeryDiningOutlinedIcon />
             </IconButton>
-            <p>關於我們</p>
+            <p>關於admin</p>
           </MenuItem>
         </Link>
         {!adminUser && (
@@ -147,7 +147,7 @@ export default function Nav() {
           >
             <BakeryDiningOutlinedIcon />
           </IconButton>
-          <p>關於我們</p>
+          <p>關於admin</p>
         </MenuItem>
       </Link>
       {!adminUser && (

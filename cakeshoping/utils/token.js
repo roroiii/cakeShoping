@@ -6,7 +6,11 @@ export const setAuthToken = (token) => {
 };
 
 export const getAuthToken = () => {
-  window.localStorage.getItem(USER_TOKEN);
+  return window.localStorage.getItem(USER_TOKEN);
+};
+
+export const checkAuthToken = () => {
+  return window.localStorage.hasOwnProperty(USER_TOKEN);
 };
 
 export const setAdminAuthToken = (token) => {
@@ -14,5 +18,9 @@ export const setAdminAuthToken = (token) => {
 };
 
 export const getAdminAuthToken = () => {
-  window.localStorage.getItem(ADMIN_TOKEN);
+  return window.localStorage.getItem(ADMIN_TOKEN);
+};
+
+export const checkAdminAuthToken = () => {
+  return window.localStorage.hasOwnProperty(ADMIN_TOKEN);
 };

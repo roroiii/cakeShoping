@@ -1,18 +1,15 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 import {
   adminLogin as adminLoginAPI,
   getAdmin as getAdminAPI,
-} from '../api/AdminAPI';
-import { setAdminAuthToken, getAdminAuthToken } from '../utils/token';
+} from '../pages/api/webAPI';
+import { setAdminAuthToken } from '../utils/token';
 export const adminUserSlice = createSlice({
   name: 'adminUser',
   initialState: {
     user: '',
   },
   reducers: {
-    // setLogin: (state, action) => {
-    //   state.user = action.payload;
-    // },
     setLogout: (state) => {
       state.user = '';
     },
@@ -31,12 +28,14 @@ export const adminLogin = (router, payload) => (dispatch) => {
     .then((res) => {
       const data = {
         username: payload.username,
+        role: res.data.role,
       };
       if (res.data.ok === 1) {
         setAdminAuthToken(res.data.token);
+        dispatch(setAdmin(data));
+        dispatch(getAdmin());
         router.push('/');
       }
-      dispatch(setAdmin(data));
       return res;
     })
     .catch((err) => {
@@ -44,20 +43,20 @@ export const adminLogin = (router, payload) => (dispatch) => {
     });
 };
 
-export const adminLogout = () => (dispatch) => {
+export const adminLogout = () => async (dispatch) => {
   dispatch(setLogout());
   setAdminAuthToken(null);
 };
 
-export const getAdmin = () => (dispatch) => {
+export const getAdmin = () => async (dispatch) => {
   getAdminAPI().then((res) => {
-    // if (res.data.ok === 1) {
-    //   const data = {
-    //     username: payload.username,
-    //   };
-    //   dispatch(setAdmin(data));
-    // }
-    console.log(res);
+    if (res.data.ok === 1 && res.data.role === 'admin') {
+      const data = {
+        username: res.data.username,
+        role: res.data.role,
+      };
+      dispatch(setAdmin(data));
+    }
   });
 };
 

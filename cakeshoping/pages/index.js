@@ -6,7 +6,7 @@ import Typography from '@mui/material/Typography';
 import ProjectCard from '../components/ProjectCard';
 import Divider from '@mui/material/Divider';
 import Box from '@mui/material/Box';
-import { getProductsAndOnePhoto } from '../api/ProductAPI';
+import { getProductsAndOnePhoto } from '../pages/api/webAPI';
 
 export default function Home({ productAndOnePhoto }) {
   return (
@@ -51,7 +51,7 @@ export const getStaticProps = async () => {
   const productAndOnePhoto = await getProductsAndOnePhoto();
   return {
     props: {
-      productAndOnePhoto: productAndOnePhoto || null,
+      productAndOnePhoto,
     },
   };
 };

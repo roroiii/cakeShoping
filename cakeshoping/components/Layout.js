@@ -6,9 +6,10 @@ import Meta from './Meta';
 import Footer from './Footer';
 import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
-import { selectAdminUser } from '../features/adminUserSlice';
-import { getAdmin } from '../api/AdminAPI.js';
-import { getAdminAuthToken } from '../utils/token';
+import { selectAdminUser, getAdmin } from '../features/adminUserSlice';
+import { selectLoading } from '../features/loadingSlice';
+import { checkAdminAuthToken } from '../utils/token';
+import Loading from '../components/Loading';
 
 const Container = styled.div`
   max-width: 1200px;
@@ -35,20 +36,20 @@ const Main = styled.main`
 const Layout = ({ children }) => {
   const adminUser = useSelector(selectAdminUser);
   const dispatch = useDispatch();
+  const isLoading = useSelector(selectLoading);
+  const isBrowser = typeof window !== undefined;
   useEffect(() => {
-    // 應該要有 token 才做
-    if (getAdminAuthToken() !== '') {
-      // getAdmin().then((res) => {
-      //   console.log(res);
-      // });
+    if (isBrowser && checkAdminAuthToken()) {
+      dispatch(getAdmin());
     }
   }, []);
 
   return (
     <>
+      {isLoading && <Loading />}
       <Meta />
       {adminUser === '' && <Nav />}
-      {adminUser && <adminNav />}
+      {adminUser.role === 'admin' && <AdminNav />}
       <Container>
         <Main>
           {/* <Header /> */}
