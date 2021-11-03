@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import Nav from './Nav';
+import UserNav from './UserNav';
 import AdminNav from './AdminNav';
 import Meta from './Meta';
 // import Header from './Header';
@@ -7,8 +8,14 @@ import Footer from './Footer';
 import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectAdminUser, getAdmin } from '../features/adminUserSlice';
+import { selectUser, getUser } from '../features/userSlice';
 import { selectLoading } from '../features/loadingSlice';
-import { checkAdminAuthToken } from '../utils/token';
+import {
+  checkAuthToken,
+  checkAdminAuthToken,
+  getAuthToken,
+  getAdminAuthToken,
+} from '../utils/token';
 import Loading from '../components/Loading';
 
 const Container = styled.div`
@@ -34,12 +41,17 @@ const Main = styled.main`
 `;
 
 const Layout = ({ children }) => {
+  const user = useSelector(selectUser);
   const adminUser = useSelector(selectAdminUser);
   const dispatch = useDispatch();
   const isLoading = useSelector(selectLoading);
   const isBrowser = typeof window !== undefined;
+
   useEffect(() => {
-    if (isBrowser && checkAdminAuthToken()) {
+    if (isBrowser && checkAuthToken() && getAuthToken() !== '') {
+      dispatch(getUser());
+    }
+    if (isBrowser && checkAdminAuthToken() && getAdminAuthToken() !== '') {
       dispatch(getAdmin());
     }
   }, []);
@@ -48,7 +60,8 @@ const Layout = ({ children }) => {
     <>
       {isLoading && <Loading />}
       <Meta />
-      {adminUser === '' && <Nav />}
+      {user === '' && adminUser === '' && <Nav />}
+      {user.role === 'user' && <UserNav />}
       {adminUser.role === 'admin' && <AdminNav />}
       <Container>
         <Main>

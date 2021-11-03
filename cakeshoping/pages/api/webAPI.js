@@ -45,6 +45,8 @@ export const interceptor = (store) => {
 
 export const adminLogin = (payload) => instance.post(`/admain`, payload);
 
+export const login = (payload) => instance.post(`/login`, payload);
+
 export const getProducts = () => instance.get(`/product`);
 export const getProduct = (id) => instance.get(`/product/${id}`);
 

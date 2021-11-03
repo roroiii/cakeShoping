@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { useRouter } from 'next/router';
-import LoginComponent from '../../components/LoginComponent';
-import { adminLogin } from '../../features/adminUserSlice';
+import LoginComponent from '../components/LoginComponent';
+import { userLogin } from '../features/userSlice';
 import { useDispatch } from 'react-redux';
 
-export default function Admin_login() {
+export default function LoginPage() {
   const dispatch = useDispatch();
   const router = useRouter();
   const [username, setUsername] = useState('');
@@ -42,7 +42,7 @@ export default function Admin_login() {
       username,
       password: values.password,
     };
-    dispatch(adminLogin(router, payload)).then((res) => {
+    dispatch(userLogin(router, payload)).then((res) => {
       if (username === '' || values.password === '') {
         return setLoginErrorMessage(`請輸入帳號密碼`);
       }
@@ -58,7 +58,7 @@ export default function Admin_login() {
       values={values}
       loginErrorMessage={loginErrorMessage}
       image={`https://picsum.photos/1200`}
-      userText={`管理員登入`}
+      userText={`會員登入`}
       handleChangeUsername={handleChangeUsername}
       handleChangePassword={handleChangePassword}
       handleClickShowPassword={handleClickShowPassword}
