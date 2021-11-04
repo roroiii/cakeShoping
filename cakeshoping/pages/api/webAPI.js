@@ -98,3 +98,25 @@ export const getUser = async () => {
     console.log(error.message);
   }
 };
+
+export const registerApi = async (username, password, realName, email, phone) => {
+  try {
+    const res = await fetch(`${server}/register`, {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json'
+      },
+      body: JSON.stringify({
+        username,
+        password,
+        realName,
+        email,
+        phone
+      })
+    })
+    return await res.json()
+  } catch (error) {
+    console.log('這裡是 ProductAPI 的 error = ', error)
+    return
+  }
+}
