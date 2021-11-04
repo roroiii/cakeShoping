@@ -61,14 +61,14 @@ const requireLogin = (req, res, next) => {
 const onlyUser = (req, res, next) => {
   const identity = req.jwtData.role;
   if (identity !== "user") {
-    res.status(401).end();
+    return res.status(401).end();
   }
   next();
 };
 const onlyAdmin = (req, res, next) => {
   const identity = req.jwtData.role;
   if (identity !== "admin") {
-    res.status(401).end();
+    return res.status(401).end();
   }
   next();
 };
@@ -102,6 +102,8 @@ router.post("/photo", requireLogin, onlyAdmin, upload.array("avatar"), photoCont
 router.get("/photo", photoControllers.getAll);
 
 router.get("/photo/:id", photoControllers.getOne);
+
+router.delete("/photo/:id", requireLogin, onlyAdmin, photoControllers.delete)
 
 router.get("/order/:uuid", orderControllers.getOrder);
 
