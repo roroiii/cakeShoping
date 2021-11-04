@@ -13,7 +13,9 @@ import Alert from '@mui/material/Alert';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Link from 'next/link';
 
-import { registerApi } from '../api/ProductAPI'
+import { registerApi, getUser } from '../pages/api/webAPI';
+import { setAuthToken } from '../utils/token';
+
 import { useRouter } from 'next/router'
 
 const theme = createTheme();
@@ -63,14 +65,13 @@ export default function SignUp() {
     if (!validateRegister()) return
 
     registerApi(username, password, realname, email, phone).then(data => {
+      console.log(data)
       if (data.ok === 0) {
         return setErrorMessage(data.message)
       }
-      // 將回傳的 JWT 存入 localStorage 裡面，這邏輯應要另外放在 utils.js 檔案中
-      localStorage.setItem('token', data.token)
+      setAuthToken(data.token)
       
       // todo：這邊尚未實作 getMe()，getMe 將 JWT 傳過去驗證後拿到會員資料，存入 user state 中才算正式登入
-
       router.push("/")
     })
   };
@@ -105,8 +106,6 @@ export default function SignUp() {
               <Grid item xs={12}>
                 <TextField
                   name="username"
-                  // required
-                  
                   fullWidth
                   id="username"
                   label="帳號"
@@ -155,7 +154,7 @@ export default function SignUp() {
                   id="email"
                   value={email}
                   onChange={e => setEmail(e.target.value)}
-                  // autoComplete='off'
+                  autoComplete='off'
                 />
               </Grid>
               {/* 電話 */}
