@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import ProductItem from '../../../components/ProductItem';
 import { getProducts, getProduct, getPhoto } from '../../../pages/api/webAPI';
+import { server } from '../../../config';
 
 export default function Product({ product, photos }) {
   return (
@@ -23,11 +24,12 @@ export const getStaticProps = async (content) => {
 };
 
 export const getStaticPaths = async () => {
-  const { data: res } = await getProducts();
-  const products = res.result;
+  const res = await fetch(`${server}/product`);
+  const products = await res.json();
 
-  const ids = products.map((product) => product.id);
-  const paths = ids.map((id) => ({ params: { id: id.toString() } }));
+  const paths = products.result.map((post) => ({
+    params: { id: post.id.toString() },
+  }));
 
   return {
     paths,

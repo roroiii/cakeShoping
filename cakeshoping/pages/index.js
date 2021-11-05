@@ -49,9 +49,17 @@ export default function Home({ productAndOnePhoto }) {
 
 export const getStaticProps = async () => {
   const productAndOnePhoto = await getProductsAndOnePhoto();
-  return {
-    props: {
-      productAndOnePhoto,
-    },
-  };
+  if (productAndOnePhoto) {
+    return {
+      props: {
+        productAndOnePhoto: productAndOnePhoto,
+      },
+    };
+  } else {
+    return {
+      props: {
+        productAndOnePhoto: null,
+      },
+    };
+  }
 };

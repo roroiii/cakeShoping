@@ -34,10 +34,6 @@ export const interceptor = (store) => {
         store.dispatch(setLoading(false));
         console.log(message);
       }
-      if (!window.navigator.onLine) {
-        alert('網路出了點問題，請重新連線後重整網頁');
-        return;
-      }
       return Promise.reject(error);
     }
   );

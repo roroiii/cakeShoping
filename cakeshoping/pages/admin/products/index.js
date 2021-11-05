@@ -23,9 +23,17 @@ export default function Products({ productAndOnePhoto }) {
 
 export const getStaticProps = async () => {
   const productAndOnePhoto = await getProductsAndOnePhoto();
-  return {
-    props: {
-      productAndOnePhoto,
-    },
-  };
+  if (productAndOnePhoto) {
+    return {
+      props: {
+        productAndOnePhoto: productAndOnePhoto,
+      },
+    };
+  } else {
+    return {
+      props: {
+        productAndOnePhoto: null,
+      },
+    };
+  }
 };
