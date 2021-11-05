@@ -149,7 +149,7 @@ export default function ProductsTable({ productAndOnePhoto }) {
     <>
       <EnhancedTableToolbar />
       <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 680 }} aria-label="simple table">
+        <Table sx={{ minWidth: 680 }} aria-label="table">
           <TableHead>
             <TableRow>
               <StyledTableCell>商品圖片</StyledTableCell>

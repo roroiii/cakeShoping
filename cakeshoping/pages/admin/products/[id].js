@@ -1,15 +1,11 @@
 import { useState } from 'react';
-
 import ProductItem from '../../../components/ProductItem';
-import Link from 'next/link';
-
 import { getProducts, getProduct, getPhoto } from '../../../pages/api/webAPI';
 
 export default function Product({ product, photos }) {
   return (
     <>
-      <ProductItem product={product.result[0]} photos={photos.result} />
-      <Link href="/">Go Back</Link>
+      <ProductItem product={product} photos={photos} />
     </>
   );
 }
@@ -20,8 +16,8 @@ export const getStaticProps = async (content) => {
 
   return {
     props: {
-      product: product,
-      photos: photos,
+      product: product.result[0],
+      photos: photos.result,
     },
   };
 };
