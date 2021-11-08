@@ -13,7 +13,7 @@ import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import Button from '@mui/material/Button';
 
-export default function Login({
+export default function LoginComponent({
   username,
   values,
   image,

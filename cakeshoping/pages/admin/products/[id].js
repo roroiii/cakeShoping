@@ -1,37 +1,93 @@
 import { useState } from 'react';
-
 import ProductItem from '../../../components/ProductItem';
-import Link from 'next/link';
+import {
+  getProducts,
+  getProduct,
+  getPhoto,
+  deletePhoto,
+  deleteProduct,
+  updateProduct,
+} from '../../../pages/api/webAPI';
+import { server } from '../../../config';
+import { useRouter } from 'next/router';
 
-import { getProducts, getProduct, getPhoto } from '../../../pages/api/webAPI';
+export default function Product({ productData, photosData }) {
+  const router = useRouter();
+  const [productName, setProductName] = useState(productData.productName);
+  const [type, setType] = useState(productData.type);
+  const [price, setPrice] = useState(productData.price);
+  const [articlel, setArticlel] = useState(productData.articlel);
+  const [isShow, setIsShow] = useState(productData.isShow ? true : false);
+  const [storage, setStorage] = useState(productData.storage);
+  const [sell, setSell] = useState(productData.sell);
+  const [id, setID] = useState(productData.id);
+  const [isDeleted, setIsDeleted] = useState(productData.isDeleted);
+  const [photos, setPhotos] = useState(photosData);
 
-export default function Product({ product, photos }) {
+  const handleUpdateProduct = async (data) => {
+    console.log(data);
+    updateProduct(data);
+    router.reload();
+  };
+  const handleDeletePhoto = (id) => {
+    setPhotos(photos.filter((photo) => photo.id !== id));
+    deletePhoto(id);
+  };
+  const handleDeleteProduct = (id) => {
+    deleteProduct(id);
+    router.push('/admin/products');
+  };
+  const handleIsShowClick = (e) => {
+    setIsShow(e.target.checked);
+  };
+
   return (
     <>
-      <ProductItem product={product.result[0]} photos={photos.result} />
-      <Link href="/">Go Back</Link>
+      <ProductItem
+        photos={photos}
+        productName={productName}
+        type={type}
+        price={price}
+        articlel={articlel}
+        isShow={isShow}
+        storage={storage}
+        sell={sell}
+        id={id}
+        setProductName={setProductName}
+        setType={setType}
+        setPrice={setPrice}
+        setArticlel={setArticlel}
+        setStorage={setStorage}
+        setSell={setSell}
+        isDeleted={isDeleted}
+        handleUpdateProduct={handleUpdateProduct}
+        handleDeletePhoto={handleDeletePhoto}
+        handleDeleteProduct={handleDeleteProduct}
+        handleIsShowClick={handleIsShowClick}
+      />
     </>
   );
 }
 
 export const getStaticProps = async (content) => {
-  const { data: product } = await getProduct(content.params.id);
-  const { data: photos } = await getPhoto(content.params.id);
+  const { data: productData } = await getProduct(content.params.id);
+  const { data: photosData } = await getPhoto(content.params.id);
 
   return {
     props: {
-      product: product,
-      photos: photos,
+      productData: productData.result[0],
+      photosData: photosData.result,
     },
   };
 };
 
 export const getStaticPaths = async () => {
-  const { data: res } = await getProducts();
-  const products = res.result;
+  const res = await fetch(`${server}/product`);
+  const products = await res.json();
 
-  const ids = products.map((product) => product.id);
-  const paths = ids.map((id) => ({ params: { id: id.toString() } }));
+  const paths = products.result.map((post) => ({
+    params: { id: post.id.toString() },
+  }));
 
   return {
     paths,

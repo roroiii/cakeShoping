@@ -45,7 +45,7 @@ export const adminLogin = (router, payload) => (dispatch) => {
 
 export const adminLogout = () => async (dispatch) => {
   dispatch(setLogout());
-  setAdminAuthToken(null);
+  setAdminAuthToken('');
 };
 
 export const getAdmin = () => async (dispatch) => {

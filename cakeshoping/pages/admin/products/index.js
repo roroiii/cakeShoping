@@ -1,67 +1,55 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import ProductsTable from '../../../components/ProductsTable';
-import { adminLogin } from '../../../features/adminUserSlice';
-import { useDispatch } from 'react-redux';
-
-import { getProductsAndOnePhoto } from '../../../pages/api/webAPI';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectAdminUser } from '../../../features/adminUserSlice';
+import {
+  getProductsAndOnePhoto,
+  productOnAndOffStatus,
+} from '../../../pages/api/webAPI';
+import NotFound from '../../../components/NotFound';
 
 export default function Products({ productAndOnePhoto }) {
+  const adminUser = useSelector(selectAdminUser);
   const dispatch = useDispatch();
   const router = useRouter();
-  const [username, setUsername] = useState('');
-  const [values, setValues] = useState({
-    password: '',
-    showPassword: false,
-  });
-  const [loginErrorMessage, setLoginErrorMessage] = useState(null);
+  const [products, setProducts] = useState(productAndOnePhoto);
 
-  const handleChangeUsername = (e) => {
-    setLoginErrorMessage(null);
-    setUsername(e.target.value);
+  const handleProductStatus = (id, status) => {
+    productOnAndOffStatus(id, status);
+    router.reload();
   };
 
-  const handleChangePassword = (prop) => (e) => {
-    setLoginErrorMessage(null);
-    setValues({ ...values, [prop]: e.target.value });
-  };
+  useEffect(() => {
+    setProducts(products.filter((product) => product.isDeleted !== 1));
+  }, []);
 
-  const handleClickShowPassword = () => {
-    setValues({
-      ...values,
-      showPassword: !values.showPassword,
-    });
-  };
-
-  const handleMouseDownPassword = (e) => {
-    e.preventDefault();
-  };
-
-  const handleLogin = (e) => {
-    e.preventDefault();
-    setLoginErrorMessage(null);
-    const payload = {
-      username,
-      password: values.password,
-    };
-    dispatch(adminLogin(router, payload)).then((res) => {
-      if (username === '' || values.password === '') {
-        return setLoginErrorMessage(`請輸入帳號密碼`);
-      }
-
-      if (res.data.ok === 0) {
-        return setLoginErrorMessage(res.data.message);
-      }
-    });
-  };
-  return <ProductsTable productAndOnePhoto={productAndOnePhoto} />;
+  return (
+    <>
+      {adminUser.role === 'admin' && (
+        <ProductsTable
+          products={products}
+          handleProductStatus={handleProductStatus}
+        />
+      )}
+      {adminUser === '' && <NotFound />}
+    </>
+  );
 }
 
 export const getStaticProps = async () => {
   const productAndOnePhoto = await getProductsAndOnePhoto();
-  return {
-    props: {
-      productAndOnePhoto,
-    },
-  };
+  if (productAndOnePhoto) {
+    return {
+      props: {
+        productAndOnePhoto: productAndOnePhoto,
+      },
+    };
+  } else {
+    return {
+      props: {
+        productAndOnePhoto: null,
+      },
+    };
+  }
 };
