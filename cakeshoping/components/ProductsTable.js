@@ -127,14 +127,12 @@ TablePaginationActions.propTypes = {
   rowsPerPage: PropTypes.number.isRequired,
 };
 
-export default function ProductsTable({ productAndOnePhoto }) {
+export default function ProductsTable({ products, handleProductStatus }) {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
 
   const emptyRows =
-    page > 0
-      ? Math.max(0, (1 + page) * rowsPerPage - productAndOnePhoto.length)
-      : 0;
+    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - products.length) : 0;
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -153,6 +151,7 @@ export default function ProductsTable({ productAndOnePhoto }) {
           <TableHead>
             <TableRow>
               <StyledTableCell>商品圖片</StyledTableCell>
+              <StyledTableCell align="left">ID</StyledTableCell>
               <StyledTableCell align="left">商品名稱</StyledTableCell>
               <StyledTableCell align="right">價格</StyledTableCell>
               <StyledTableCell align="right">類別</StyledTableCell>
@@ -164,11 +163,11 @@ export default function ProductsTable({ productAndOnePhoto }) {
           </TableHead>
           <TableBody>
             {(rowsPerPage > 0
-              ? productAndOnePhoto.slice(
+              ? products.slice(
                   page * rowsPerPage,
                   page * rowsPerPage + rowsPerPage
                 )
-              : productAndOnePhoto
+              : products
             ).map((row) => (
               <TableRow
                 key={row.id}
@@ -200,10 +199,11 @@ export default function ProductsTable({ productAndOnePhoto }) {
                     ></div>
                   )}
                 </TableCell>
+                <TableCell align="left">{row.id}</TableCell>
                 <TableCell align="left">{row.productName}</TableCell>
                 <TableCell align="right">{row.price}</TableCell>
                 <TableCell align="right">{row.type}</TableCell>
-                <TableCell align="right">{row.isShow ? 'O' : 'X'}</TableCell>
+                <TableCell align="right">{row.isShow ? '是' : '否'}</TableCell>
                 <TableCell align="right">
                   {row.storage > 0 ? row.storage : '-'}
                 </TableCell>
@@ -218,7 +218,22 @@ export default function ProductsTable({ productAndOnePhoto }) {
                   >
                     編輯
                   </Button>
-                  <Button variant="outlined">下架</Button>
+                  {row.isShow === 1 && (
+                    <Button
+                      variant="outlined"
+                      onClick={() => handleProductStatus(row.id, '0')}
+                    >
+                      下架
+                    </Button>
+                  )}
+                  {row.isShow === 0 && (
+                    <Button
+                      variant="outlined"
+                      onClick={() => handleProductStatus(row.id, '1')}
+                    >
+                      上架
+                    </Button>
+                  )}
                 </TableCell>
               </TableRow>
             ))}
@@ -233,7 +248,7 @@ export default function ProductsTable({ productAndOnePhoto }) {
               <TablePagination
                 rowsPerPageOptions={[10, 25, { label: 'All', value: -1 }]}
                 colSpan={8}
-                count={productAndOnePhoto.length}
+                count={products.length}
                 rowsPerPage={rowsPerPage}
                 page={page}
                 SelectProps={{

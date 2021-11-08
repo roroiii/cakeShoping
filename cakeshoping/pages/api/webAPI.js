@@ -46,8 +46,77 @@ export const login = (payload) => instance.post(`/login`, payload);
 export const getProducts = () => instance.get(`/product`);
 export const getProduct = (id) => instance.get(`/product/${id}`);
 
+export const deleteProduct = async (id) => {
+  try {
+    const adminToken = getAdminAuthToken();
+    const res = await axios({
+      method: 'DELETE',
+      url: `${server}/product/${id}`,
+      headers: {
+        authorization: adminToken,
+      },
+    });
+    return res;
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+
+export const updateProduct = async (data) => {
+  try {
+    const adminToken = getAdminAuthToken();
+    const res = await axios({
+      method: 'PATCH',
+      url: `${server}/product/`,
+      headers: {
+        authorization: adminToken,
+      },
+      data,
+    });
+    return res;
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+
+export const productOnAndOffStatus = async (id, status) => {
+  try {
+    const adminToken = getAdminAuthToken();
+    const res = await axios({
+      method: 'POST',
+      url: `${server}/product/status`,
+      headers: {
+        authorization: adminToken,
+      },
+      data: {
+        id,
+        status,
+      },
+    });
+    return res;
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+
 export const getAllPhotos = () => instance.get(`/photo`);
 export const getPhoto = (id) => instance.get(`/photo/${id}`);
+
+export const deletePhoto = async (id) => {
+  try {
+    const adminToken = getAdminAuthToken();
+    const res = await axios({
+      method: 'DELETE',
+      url: `${server}/photo/${id}`,
+      headers: {
+        authorization: adminToken,
+      },
+    });
+    return res;
+  } catch (error) {
+    console.log(error.message);
+  }
+};
 
 export const getProductsAndOnePhoto = async () => {
   try {
