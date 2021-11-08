@@ -20,7 +20,7 @@ const orderControllers = {
     try {
       const { page, limit } = req.query;
       const startId = (Number(page) - 1) * Number(limit) + 1;
-      const endId = startId + Number(limit);
+      const endId = startId + Number(limit) - 1;
       orderModel.getPage(startId, endId, (err, result) => {
         if (err) {
           console.log(`getPage error：${err.toString()}`);
@@ -28,7 +28,7 @@ const orderControllers = {
           return res.json(makeError(ERROR_CODE.INVALID, "取得該頁訂單失敗"));
         }
         res.status(200);
-        return res.json({ ok: 1, result: result[0] });
+        return res.json({ ok: 1, result: result });
       });
     } catch (error) {
       console.log("ctl order getPage catchERROR :", error);
@@ -63,7 +63,7 @@ const orderControllers = {
   // 拿取該會員全部訂單
   getUserAll: (req, res) => {
     try {
-      const { userId } = req.query;
+      const { userId } = req.body;
       orderModel.getUserAll(userId, (err, result) => {
         if (err) {
           console.log(`getUserAll error：${err.toString()}`);
@@ -87,7 +87,7 @@ const orderControllers = {
   // 拿取該筆訂單號的詳細訂單資料
   getOrder: (req, res) => {
     try {
-      const uuid = req.params;
+      const uuid = req.params.uuid;
       orderModel.getOrder(uuid, (err, result) => {
         if (err) {
           console.log(`getOrder error：${err.toString()}`);
@@ -130,8 +130,9 @@ const orderControllers = {
   },
   // 建立訂單
   add: (req, res) => {
-    const { userId, totalPrice, productList, name, phone, address, email } =
-      req.body.order;
+    const userId = req.jwtData.id;
+
+    const { totalPrice, productList, name, phone, address, email } = req.body;
 
     const handleAddOrder = new Promise((resolve, reject) => {
       // 比對庫存量是否足夠
@@ -174,7 +175,7 @@ const orderControllers = {
       })
       .then((orderid) => {
         // 寫入 recipients 表
-        return recipientPromise(orderid, name, phone, address);
+        return recipientPromise(orderid, name, phone, address, email);
       })
       .then((orderid) => {
         // 訂單新增完成 回傳responce
@@ -191,9 +192,10 @@ function renewPromise(renewArr) {
   return new Promise((res, rej) => {
     orderModel.renew(renewArr, (err) => {
       if (err) {
+        console.log("renewPromise error :", err);
         return rej({ error: "更新庫存、銷售量失敗" });
       }
-      res();
+      return res();
     });
   });
 }
@@ -201,6 +203,7 @@ function addPromise(orderid, userId, totalPrice) {
   return new Promise((res, rej) => {
     orderModel.add(orderid, userId, totalPrice, (err) => {
       if (err) {
+        console.log("addPromise error :", err);
         return rej({ error: "新增訂單失敗" });
       }
       return res(orderid);
@@ -211,16 +214,18 @@ function addopPromise(orderid, productList) {
   return new Promise((res, rej) => {
     orderModel.addop(orderid, productList, (err) => {
       if (err) {
+        console.log("addopPromise error :", err);
         return rej({ error: "新增商品銷售紀錄失敗" });
       }
       return res(orderid);
     });
   });
 }
-function recipientPromise(orderid, name, phone, address) {
+function recipientPromise(orderid, name, phone, address, email) {
   return new Promise((res, rej) => {
     orderModel.addRecipient({ orderid, name, phone, address, email }, (err) => {
       if (err) {
+        console.log("recipientPromise error :", err);
         return rej({ error: "新增購買者訂購資料失敗" });
       }
       return res(orderid);

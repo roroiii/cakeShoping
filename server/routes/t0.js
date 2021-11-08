@@ -105,17 +105,17 @@ router.get("/photo/:id", photoControllers.getOne);
 
 router.delete("/photo/:id", requireLogin, onlyAdmin, photoControllers.delete)
 
-router.get("/order/:uuid", orderControllers.getOrder);
-
-router.get("/order/user/:id", orderControllers.getUserAll);
-
-router.get("/order/all", requireLogin, onlyAdmin, orderControllers.getAll);
+router.get("/order/:uuid", requireLogin, orderControllers.getOrder);
 
 router.get("/order", requireLogin, onlyAdmin, orderControllers.getPage);
 
 router.patch("/order", requireLogin, onlyAdmin, orderControllers.update);
 
-router.post("/order", requireLogin, onlyAdmin, orderControllers.add);
+router.post("/order", requireLogin, orderControllers.add);
+
+router.post("/orderUser", requireLogin, orderControllers.getUserAll);
+
+router.get("/orderAll", requireLogin, onlyAdmin, orderControllers.getAll);
 
 router.use((req, res) => {
   res.status(404).send("404 Not found");
