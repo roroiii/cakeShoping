@@ -81,6 +81,17 @@ const photoModel = {
       cb(error);
     }
   },
+  delete: (id, cb) => {
+    try {
+      db.query("DELETE FROM photos WHERE id = ?", [id], (err) => {
+        if (err) return cb(err);
+        return cb(null);
+      })
+    } catch (error) {
+      console.log("modles photo delete catchERROR ：", error);
+      cb(error);
+    }
+  }
 };
 
 module.exports = photoModel;

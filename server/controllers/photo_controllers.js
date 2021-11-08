@@ -107,6 +107,7 @@ const photoControllers = {
       });
     }
   },
+  // 編輯商品圖片
   update: (req, res) => {
     try {
       const { productId, updateList } = req.body;
@@ -155,6 +156,28 @@ const photoControllers = {
       });
     }
   },
+  // 刪除商品圖片
+  delete: (req, res) => {
+    try {
+      const { id } = req.params;
+      photoModel.delete(id, (err) => {
+        if (err) {
+          console.log("photo delete error：", err.toString());
+          res.status(403);
+          return res.json(makeError(ERROR_CODE.INVALID, "刪除圖片失敗"));
+        }
+        res.status(200);
+        return res.json({ ok: 1 });
+      })
+    } catch (error) {
+      console.log("ctl photo delete catchERROR ：", error);
+      res.status(404);
+      return res.json({
+        ok: 0,
+        message: `ctl photo delete catchERROR：${error}`,
+      });
+    }
+  }
 };
 
 module.exports = photoControllers;
