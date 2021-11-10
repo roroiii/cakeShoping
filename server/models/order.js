@@ -2,8 +2,14 @@ const db = require("../config/dbConfig");
 
 const orderModel = {
   getPage: (startId, endId, cb) => {
+    let sql 
+    if (startId && endId) {
+      sql = "SELECT * FROM `order` WHERE id BETWEEN ? AND ? "
+    } else {
+      sql = "SELECT * FROM `order`"
+    } 
     db.query(
-      "SELECT * FROM `order` WHERE id BETWEEN ? AND ?",
+      sql,
       [startId, endId],
       (err, result) => {
         if (err) return cb(err);

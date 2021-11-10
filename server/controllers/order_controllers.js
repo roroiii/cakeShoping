@@ -19,8 +19,17 @@ const orderControllers = {
   getPage: (req, res) => {
     try {
       const { page, limit } = req.query;
-      const startId = (Number(page) - 1) * Number(limit) + 1;
-      const endId = startId + Number(limit) - 1;
+      if((page && !limit) || (!page && limit)) {
+        console.log(`getPage error：參數錯誤`);
+        res.status(403);
+        return res.json(makeError(ERROR_CODE.INVALID, "參數錯誤"));
+      }
+      let startId
+      let endId
+      if (page && limit) {
+        startId = (Number(page) - 1) * Number(limit) + 1;
+        endId = startId + Number(limit) - 1;
+      }
       orderModel.getPage(startId, endId, (err, result) => {
         if (err) {
           console.log(`getPage error：${err.toString()}`);
