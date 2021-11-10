@@ -3,7 +3,7 @@ const db = require("../config/dbConfig");
 const orderModel = {
   getPage: (startId, endId, cb) => {
     db.query(
-      "SELECT * FROM order WHERE id BETWEEN ? AND ?",
+      "SELECT * FROM `order` WHERE id BETWEEN ? AND ?",
       [startId, endId],
       (err, result) => {
         if (err) return cb(err);
@@ -13,7 +13,7 @@ const orderModel = {
   },
   getAll: (cb) => {
     try {
-      db.query("SELECT COUNT(*) FROM order WHERE 1=1", (err, result) => {
+      db.query("SELECT COUNT(*) FROM `order` WHERE 1=1", (err, result) => {
         if (err) return cb(err);
         return cb(null, result);
       });
@@ -25,7 +25,7 @@ const orderModel = {
   getUserAll: (userId, cb) => {
     try {
       db.query(
-        "SELECT * FROM order WHERE userId = ?",
+        "SELECT * FROM `order` WHERE userId = ?",
         [userId],
         (err, result) => {
           if (err) return cb(err);
@@ -40,7 +40,7 @@ const orderModel = {
   getOrder: (uuid, cb) => {
     try {
       db.query(
-        "SELECT * FROM (SELECT userId, status, totalPrice, orderid FROM order WHERE orderid = ? ) AS a INNER JOIN (SELECT orderid, productId, count, unitPrice FROM order_products) AS b ON (a.orderid = b.orderid) INNER JOIN (SELECT id, productName FROM products) AS c ON (b.productId = c.id)",
+        "SELECT * FROM (SELECT userId, status, totalPrice, orderid FROM `order` WHERE orderid = ? ) AS a INNER JOIN (SELECT orderid, productId, count, unitPrice FROM order_products) AS b ON (a.orderid = b.orderid) INNER JOIN (SELECT id, productName FROM products) AS c ON (b.productId = c.id)",
         [uuid],
         (err, result) => {
           if (err) return cb(err);
@@ -54,12 +54,12 @@ const orderModel = {
   },
   update: (orderId, status, cb) => {
     try {
-      db.query("UPDATE order SET status = ? WHERE orderId = ?"),
-        [status, orderId],
+      db.query("UPDATE `order` SET status = ? WHERE orderid = ?",
+      [status, orderId],
         (err) => {
           if (err) return cb(err);
           return cb(null);
-        };
+        });
     } catch (error) {
       console.log("models order update catchERROR ：", error);
       cb(error);
@@ -92,7 +92,7 @@ const orderModel = {
   },
   renew: (renewArr, cb) => {
     try {
-      let sql = "REPLACE INTO photo (id,storage,sell) values ";
+      let sql = "INSERT INTO products (id,storage,sell) values ";
       let sqlValues = "";
       let sqlWhere = [];
       for (let i = 0; i < renewArr.length; i++) {
@@ -109,6 +109,8 @@ const orderModel = {
         sqlWhere.push(renewArr[i].sell);
       }
       sql += sqlValues;
+      sql +=
+        " ON DUPLICATE KEY UPDATE storage = VALUES(storage), sell = VALUES(sell)";
       db.query(sql, sqlWhere, (err) => {
         if (err) return cb(err);
         return cb(null);
@@ -121,8 +123,8 @@ const orderModel = {
   add: (orderid, userId, totalPrice, cb) => {
     try {
       db.query(
-        "INSERT INTO order(orderid, userId, status, totalPrice) VALUES(?, ?, ?, ?)",
-        [orderid, userId, 0, totalPrice],
+        "INSERT INTO `order`(orderid, userId, totalPrice, status) VALUES(?, ?, ?, ?)",
+        [orderid, userId, totalPrice, 0],
         (err) => {
           if (err) return cb(err);
           return cb(null);
