@@ -7,6 +7,7 @@ import {
   deletePhoto,
   deleteProduct,
   updateProduct,
+  addNewPhoto,
 } from '../../../pages/api/webAPI';
 import { server } from '../../../config';
 import { useRouter } from 'next/router';
@@ -23,11 +24,42 @@ export default function Product({ productData, photosData }) {
   const [id, setID] = useState(productData.id);
   const [isDeleted, setIsDeleted] = useState(productData.isDeleted);
   const [photos, setPhotos] = useState(photosData);
+  const [fileSrc, setFileSrc] = useState(null);
+  const [photoSrc, setPhotoSrc] = useState(null);
+  const handleUploadFile = (e) => {
+    const _file = e.target.files[0];
+    if (!_file) return;
+    setPhotoSrc(_file);
+    let reader = new FileReader();
+    reader.onload = function () {
+      setFileSrc(reader.result);
+    };
+    reader.readAsDataURL(_file);
+    const data = {
+      avatar: _file,
+      id: id.toString(),
+    };
+    addNewPhoto(data);
+    console.log(data);
+    e.target.value = '';
+  };
+  const handleClearFile = (e) => {
+    e.preventDefault();
+    setFileSrc(null);
+  };
 
   const handleUpdateProduct = async (data) => {
     console.log(data);
-    updateProduct(data);
-    router.reload();
+    // console.log(newPhoto);
+    // updateProduct(data);
+    // addNewPhoto(newPhoto);
+    // router.reload();
+  };
+
+  const handleAddPhoto = async (data) => {
+    console.log(data);
+    // updateProduct(data);
+    // addNewPhoto(newPhoto);
   };
   const handleDeletePhoto = (id) => {
     setPhotos(photos.filter((photo) => photo.id !== id));
@@ -44,6 +76,7 @@ export default function Product({ productData, photosData }) {
   return (
     <>
       <ProductItem
+        title={`編輯商品 ID:`}
         photos={photos}
         productName={productName}
         type={type}
@@ -64,6 +97,11 @@ export default function Product({ productData, photosData }) {
         handleDeletePhoto={handleDeletePhoto}
         handleDeleteProduct={handleDeleteProduct}
         handleIsShowClick={handleIsShowClick}
+        fileSrc={fileSrc}
+        photoSrc={photoSrc}
+        handleAddPhoto={handleAddPhoto}
+        handleUploadFile={handleUploadFile}
+        handleClearFile={handleClearFile}
       />
     </>
   );

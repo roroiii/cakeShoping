@@ -1,18 +1,20 @@
 import { useState } from 'react';
-import Box from '@mui/material/Box';
-import TextField from '@mui/material/TextField';
-import Paper from '@mui/material/Paper';
-import Button from '@mui/material/Button';
-import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
-import Divider from '@mui/material/Divider';
 import { auto } from '@popperjs/core';
-import FormGroup from '@mui/material/FormGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Switch from '@mui/material/Switch';
-import { styled } from '@mui/material/styles';
-import Stack from '@mui/material/Stack';
 import CloseIcon from '@mui/icons-material/Close';
+import AddPhoto from './AddPhoto';
+import {
+  Box,
+  TextField,
+  Paper,
+  Button,
+  IconButton,
+  Typography,
+  Divider,
+  FormGroup,
+  FormControlLabel,
+  Switch,
+  styled,
+} from '@mui/material/';
 
 const AddPhotoButton = styled(Button)`
   border: 1px dashed;
@@ -41,10 +43,17 @@ export default function ProductItem({
   setStorage,
   setSell,
   isDeleted,
+  title,
+  handleAddProduct,
   handleUpdateProduct,
   handleDeletePhoto,
   handleDeleteProduct,
   handleIsShowClick,
+  fileSrc,
+  photoSrc,
+  handleAddPhoto,
+  handleUploadFile,
+  handleClearFile,
 }) {
   return (
     <>
@@ -61,7 +70,8 @@ export default function ProductItem({
           }}
         >
           <Typography variant="body" color="text.secondary">
-            編輯商品 ID:{id}
+            {title}
+            {id}
           </Typography>
           {!isDeleted && (
             <Button
@@ -89,50 +99,45 @@ export default function ProductItem({
                 padding: '0 10px',
               }}
             >
-              {photos.map((photo) => (
-                <Box
-                  sx={{
-                    width: '33.33%',
-                    p: 2,
-                    position: 'relative',
-                    height: '180px',
-                    overflow: 'hidden',
-                  }}
-                  key={photo.id}
-                >
-                  <IconButton
-                    onClick={() => handleDeletePhoto(photo.id)}
-                    aria-label="delete"
-                    variant="contained"
+              {photos &&
+                photos.map((photo) => (
+                  <Box
                     sx={{
-                      width: '28px',
-                      height: '28px',
-                      background: '#d0d0d0',
-                      color: '#fff',
-                      position: 'absolute',
-                      top: 0,
-                      right: 0,
+                      width: '33.33%',
+                      p: 2,
+                      position: 'relative',
+                      height: '180px',
+                      overflow: 'hidden',
                     }}
+                    key={photo.id}
                   >
-                    <CloseIcon />
-                  </IconButton>
-                  <img
-                    src={photo.url}
-                    style={{ width: '100%', height: '100%' }}
-                  />
-                </Box>
-              ))}
-              <Box sx={{ width: '33.33%', p: 2 }}>
-                <label htmlFor="update-photos">
-                  <Input
-                    accept="image/*"
-                    id="update-photos"
-                    multiple
-                    type="file"
-                  />
-                  <AddPhotoButton component="span">+加入照片</AddPhotoButton>
-                </label>
-              </Box>
+                    <IconButton
+                      onClick={() => handleDeletePhoto(photo.id)}
+                      aria-label="delete"
+                      variant="contained"
+                      sx={{
+                        width: '28px',
+                        height: '28px',
+                        background: '#d0d0d0',
+                        color: '#fff',
+                        position: 'absolute',
+                        top: 0,
+                        right: 0,
+                      }}
+                    >
+                      <CloseIcon />
+                    </IconButton>
+                    <img
+                      src={photo.url}
+                      style={{ width: '100%', height: '100%' }}
+                    />
+                  </Box>
+                ))}
+              <AddPhoto
+                fileSrc={fileSrc}
+                handleUploadFile={handleUploadFile}
+                handleClearFile={handleClearFile}
+              />
             </Box>
             <Divider sx={{ pt: 1, mb: 2 }} />
             <Box
@@ -210,33 +215,63 @@ export default function ProductItem({
                 onChange={(e) => setArticlel(e.target.value)}
               />
               <Switch checked={isShow} onChange={handleIsShowClick} />
-              <Button
-                variant="contained"
-                size="large"
-                sx={{
-                  width: '100%',
-                  maxWidth: '284px',
-                  mt: 6,
-                  mb: 6,
-                  marginRight: 'auto',
-                  marginLeft: 'auto',
-                }}
-                onClick={() => {
-                  const data = {
-                    productName: productName.toString(),
-                    type: type.toString(),
-                    price: price.toString(),
-                    articlel: articlel.toString(),
-                    isShow: isShow ? '1' : '0',
-                    storage: storage.toString(),
-                    sell: sell.toString(),
-                    id: id.toString(),
-                  };
-                  handleUpdateProduct(data);
-                }}
-              >
-                送出
-              </Button>
+              {id ? (
+                <Button
+                  variant="contained"
+                  size="large"
+                  sx={{
+                    width: '100%',
+                    maxWidth: '284px',
+                    mt: 6,
+                    mb: 6,
+                    marginRight: 'auto',
+                    marginLeft: 'auto',
+                  }}
+                  onClick={() => {
+                    const data = {
+                      productName: productName.toString(),
+                      type: type.toString(),
+                      price: price.toString(),
+                      articlel: articlel.toString(),
+                      isShow: isShow ? '1' : '0',
+                      storage: storage.toString(),
+                      sell: sell.toString(),
+                      id: id.toString(),
+                    };
+                    handleUpdateProduct(data);
+                  }}
+                >
+                  送出
+                </Button>
+              ) : (
+                <Button
+                  variant="contained"
+                  size="large"
+                  sx={{
+                    width: '100%',
+                    maxWidth: '284px',
+                    mt: 6,
+                    mb: 6,
+                    marginRight: 'auto',
+                    marginLeft: 'auto',
+                  }}
+                  onClick={() => {
+                    const data = {
+                      productName: productName.toString(),
+                      type: type.toString(),
+                      price: price.toString(),
+                      articlel: articlel.toString(),
+                      isShow: isShow ? '1' : '0',
+                      storage: storage.toString(),
+                      sell: sell.toString(),
+                    };
+
+                    handleAddProduct(data, newPhoto);
+                  }}
+                >
+                  新增
+                </Button>
+              )}
             </Box>
           </>
         )}
