@@ -26,52 +26,56 @@ export default function AddPhoto({
   fileSrc,
   handleUploadFile,
   handleClearFile,
+  handleAddPhoto,
 }) {
   return (
     <>
-      {fileSrc ? (
-        <Box
-          sx={{
-            width: '33.33%',
-            p: 2,
-            position: 'relative',
-            height: '180px',
-            overflow: 'hidden',
-          }}
-        >
-          <IconButton
-            onClick={handleClearFile}
-            aria-label="delete"
-            variant="contained"
+      <Box component="form">
+        {fileSrc ? (
+          <Box
             sx={{
-              width: '28px',
-              height: '28px',
-              background: '#d0d0d0',
-              color: '#fff',
-              position: 'absolute',
-              top: 0,
-              right: 0,
+              width: '33.33%',
+              p: 2,
+              position: 'relative',
+              height: '180px',
+              overflow: 'hidden',
             }}
           >
-            <CloseIcon />
-          </IconButton>
+            <IconButton
+              onClick={handleClearFile}
+              aria-label="delete"
+              variant="contained"
+              sx={{
+                width: '28px',
+                height: '28px',
+                background: '#d0d0d0',
+                color: '#fff',
+                position: 'absolute',
+                top: 0,
+                right: 0,
+              }}
+            >
+              <CloseIcon />
+            </IconButton>
 
-          <img src={fileSrc} style={{ width: '100%', height: '100%' }} />
-        </Box>
-      ) : (
-        <Box sx={{ width: '33.33%', p: 2 }}>
-          <label htmlFor="update-photos">
-            <Input
-              accept="image/*"
-              id="update-photos"
-              multiple
-              type="file"
-              onChange={handleUploadFile}
-            />
-            <AddPhotoButton component="span">+加入照片</AddPhotoButton>
-          </label>
-        </Box>
-      )}
+            <img src={fileSrc} style={{ width: '100%', height: '100%' }} />
+          </Box>
+        ) : (
+          <Box sx={{ width: '33.33%', p: 2 }}>
+            <label htmlFor="update-photos">
+              <Input
+                accept="image/*"
+                id="update-photos"
+                multiple
+                type="file"
+                onChange={handleUploadFile}
+              />
+              <AddPhotoButton component="span">+加入照片</AddPhotoButton>
+            </label>
+          </Box>
+        )}
+        <Button onClick={handleAddPhoto}>上傳圖片</Button>
+      </Box>
     </>
   );
 }

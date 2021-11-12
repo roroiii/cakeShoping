@@ -89,6 +89,7 @@ export default function ProductItem({
         {!isDeleted && (
           <>
             <Box
+              component="form"
               sx={{
                 width: '100%',
                 maxWidth: { xs: auto, md: 600 },
@@ -137,6 +138,7 @@ export default function ProductItem({
                 fileSrc={fileSrc}
                 handleUploadFile={handleUploadFile}
                 handleClearFile={handleClearFile}
+                handleAddPhoto={handleAddPhoto}
               />
             </Box>
             <Divider sx={{ pt: 1, mb: 2 }} />
@@ -238,6 +240,10 @@ export default function ProductItem({
                       sell: sell.toString(),
                       id: id.toString(),
                     };
+                    // const newPhoto = {
+                    //   avatar: [e.target.files[0], fileSrc],
+                    //   productId: id.toString(),
+                    // };
                     handleUpdateProduct(data);
                   }}
                 >

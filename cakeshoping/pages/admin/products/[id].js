@@ -26,21 +26,21 @@ export default function Product({ productData, photosData }) {
   const [photos, setPhotos] = useState(photosData);
   const [fileSrc, setFileSrc] = useState(null);
   const [photoSrc, setPhotoSrc] = useState(null);
-  const handleUploadFile = (e) => {
+
+  const handleUploadFile = async (e) => {
     const _file = e.target.files[0];
+    let uploadedFiles = event.target.files;
+    let files = [];
+    for (let i = 0; i < uploadedFiles.length; i++) {
+      files.push(uploadedFiles[i]);
+    }
     if (!_file) return;
-    setPhotoSrc(_file);
+    setPhotoSrc([_file]);
     let reader = new FileReader();
     reader.onload = function () {
       setFileSrc(reader.result);
     };
     reader.readAsDataURL(_file);
-    const data = {
-      avatar: _file,
-      id: id.toString(),
-    };
-    addNewPhoto(data);
-    console.log(data);
     e.target.value = '';
   };
   const handleClearFile = (e) => {
@@ -49,17 +49,19 @@ export default function Product({ productData, photosData }) {
   };
 
   const handleUpdateProduct = async (data) => {
-    console.log(data);
-    // console.log(newPhoto);
-    // updateProduct(data);
-    // addNewPhoto(newPhoto);
-    // router.reload();
+    updateProduct(data);
+    router.reload();
   };
 
-  const handleAddPhoto = async (data) => {
+  const handleAddPhoto = async () => {
+    let formData = [];
+    formData.push({ image: fileSrc });
+    const data = {
+      avatar: [{ image: fileSrc }],
+      productId: id.toString(),
+    };
+    addNewPhoto(data);
     console.log(data);
-    // updateProduct(data);
-    // addNewPhoto(newPhoto);
   };
   const handleDeletePhoto = (id) => {
     setPhotos(photos.filter((photo) => photo.id !== id));

@@ -127,7 +127,9 @@ export const addNewPhoto = async (data) => {
       url: `${server}/photo/`,
       headers: {
         authorization: adminToken,
+        withCredentials: false,
       },
+      mimeType: 'multipart/form-data',
       data,
     });
     return res;
