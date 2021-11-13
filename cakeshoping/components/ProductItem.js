@@ -1,17 +1,12 @@
-import { useState } from 'react';
 import { auto } from '@popperjs/core';
-import CloseIcon from '@mui/icons-material/Close';
 import AddPhoto from './AddPhoto';
 import {
   Box,
   TextField,
   Paper,
   Button,
-  IconButton,
   Typography,
   Divider,
-  FormGroup,
-  FormControlLabel,
   Switch,
   styled,
 } from '@mui/material/';
@@ -49,7 +44,6 @@ export default function ProductItem({
   handleDeletePhoto,
   handleDeleteProduct,
   handleIsShowClick,
-  fileSrc,
   photoSrc,
   handleAddPhoto,
   handleUploadFile,
@@ -88,59 +82,14 @@ export default function ProductItem({
         {isDeleted === 1 && <span>商品已刪除</span>}
         {!isDeleted && (
           <>
-            <Box
-              component="form"
-              sx={{
-                width: '100%',
-                maxWidth: { xs: auto, md: 600 },
-                display: 'flex',
-                justifyContent: 'start',
-                alignItems: 'start',
-                flexWrap: { xs: 'wrap' },
-                padding: '0 10px',
-              }}
-            >
-              {photos &&
-                photos.map((photo) => (
-                  <Box
-                    sx={{
-                      width: '33.33%',
-                      p: 2,
-                      position: 'relative',
-                      height: '180px',
-                      overflow: 'hidden',
-                    }}
-                    key={photo.id}
-                  >
-                    <IconButton
-                      onClick={() => handleDeletePhoto(photo.id)}
-                      aria-label="delete"
-                      variant="contained"
-                      sx={{
-                        width: '28px',
-                        height: '28px',
-                        background: '#d0d0d0',
-                        color: '#fff',
-                        position: 'absolute',
-                        top: 0,
-                        right: 0,
-                      }}
-                    >
-                      <CloseIcon />
-                    </IconButton>
-                    <img
-                      src={photo.url}
-                      style={{ width: '100%', height: '100%' }}
-                    />
-                  </Box>
-                ))}
-              <AddPhoto
-                fileSrc={fileSrc}
-                handleUploadFile={handleUploadFile}
-                handleClearFile={handleClearFile}
-                handleAddPhoto={handleAddPhoto}
-              />
-            </Box>
+            <AddPhoto
+              photos={photos}
+              photoSrc={photoSrc}
+              handleUploadFile={handleUploadFile}
+              handleClearFile={handleClearFile}
+              handleAddPhoto={handleAddPhoto}
+            />
+
             <Divider sx={{ pt: 1, mb: 2 }} />
             <Box
               component="form"
@@ -240,10 +189,6 @@ export default function ProductItem({
                       sell: sell.toString(),
                       id: id.toString(),
                     };
-                    // const newPhoto = {
-                    //   avatar: [e.target.files[0], fileSrc],
-                    //   productId: id.toString(),
-                    // };
                     handleUpdateProduct(data);
                   }}
                 >
