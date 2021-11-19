@@ -82,15 +82,19 @@ export default function ProductItem({
         {isDeleted === 1 && <span>商品已刪除</span>}
         {!isDeleted && (
           <>
-            <AddPhoto
-              photos={photos}
-              photoSrc={photoSrc}
-              handleUploadFile={handleUploadFile}
-              handleClearFile={handleClearFile}
-              handleAddPhoto={handleAddPhoto}
-            />
-
-            <Divider sx={{ pt: 1, mb: 2 }} />
+            {id && (
+              <>
+                <AddPhoto
+                  photos={photos}
+                  photoSrc={photoSrc}
+                  handleUploadFile={handleUploadFile}
+                  handleClearFile={handleClearFile}
+                  handleAddPhoto={handleAddPhoto}
+                  handleDeletePhoto={handleDeletePhoto}
+                />
+                <Divider sx={{ pt: 1, mb: 2 }} />
+              </>
+            )}
             <Box
               component="form"
               sx={{
@@ -144,7 +148,6 @@ export default function ProductItem({
                 value={storage || 0}
                 onChange={(e) => setStorage(e.target.value)}
               />
-
               <TextField
                 required
                 variant="filled"
@@ -166,6 +169,9 @@ export default function ProductItem({
                 onChange={(e) => setArticlel(e.target.value)}
               />
               <Switch checked={isShow} onChange={handleIsShowClick} />
+              <Typography variant="p" color="text.secondary">
+                上架
+              </Typography>
               {id ? (
                 <Button
                   variant="contained"
@@ -217,7 +223,7 @@ export default function ProductItem({
                       sell: sell.toString(),
                     };
 
-                    handleAddProduct(data, newPhoto);
+                    handleAddProduct(data);
                   }}
                 >
                   新增

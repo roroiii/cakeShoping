@@ -24,9 +24,10 @@ export default function Product() {
   const [photos, setPhotos] = useState('');
 
   const handleAddProduct = async (data) => {
-    addProduct(data);
-    console.log(data);
-    // router.push('/admin/products');
+    addProduct(data).then((res) => {
+      console.log(res);
+    });
+    router.push('/admin/products');
   };
   const handleDeletePhoto = (id) => {
     setPhotos(photos.filter((photo) => photo.id !== id));

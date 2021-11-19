@@ -53,7 +53,9 @@ const EnhancedTableToolbar = (props) => {
       </Typography>
 
       <Tooltip title="Filter list">
-        <Button variant="contained">新增</Button>
+        <Button variant="contained" href="/admin/products/add">
+          新增
+        </Button>
       </Tooltip>
     </Toolbar>
   );

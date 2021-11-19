@@ -17,6 +17,7 @@ export default function AddPhoto({
   photoSrc,
   handleUploadFile,
   handleAddPhoto,
+  handleDeletePhoto,
 }) {
   return (
     <>
@@ -75,7 +76,7 @@ export default function AddPhoto({
             <AddPhotoButton component="span">+加入照片</AddPhotoButton>
           </label>
         </Box>
-        <Button onClick={handleAddPhoto}>更新圖片</Button>
+        {/* <Button onClick={handleAddPhoto}>更新圖片</Button> */}
       </Box>
     </>
   );
