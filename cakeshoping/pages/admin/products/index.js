@@ -26,13 +26,14 @@ export default function Products({ productAndOnePhoto }) {
 
   return (
     <>
-      {adminUser.role === 'admin' && (
+      {adminUser.role === 'admin' ? (
         <ProductsTable
           products={products}
           handleProductStatus={handleProductStatus}
         />
+      ) : (
+        <NotFound />
       )}
-      {adminUser === '' && <NotFound />}
     </>
   );
 }

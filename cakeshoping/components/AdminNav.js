@@ -69,7 +69,7 @@ export default function AdminNav() {
             <p>商品管理</p>
           </MenuItem>
         </Link>
-        <Link href={`/admin/order`}>
+        <Link href={`/admin/orders`}>
           <MenuItem>
             <IconButton
               size="small"
@@ -84,7 +84,7 @@ export default function AdminNav() {
             <p>訂單管理</p>
           </MenuItem>
         </Link>
-        <Link href={`/admin/members`}>
+        {/* <Link href={`/admin/members`}>
           <MenuItem>
             <IconButton
               size="small"
@@ -96,9 +96,9 @@ export default function AdminNav() {
             >
               <PermContactCalendarIcon />
             </IconButton>
-            <p>會員管理</p>
+            <p>會員列表</p>
           </MenuItem>
-        </Link>
+        </Link> */}
         <MenuItem onClick={handleLogout}>
           <IconButton
             size="small"

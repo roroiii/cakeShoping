@@ -1,20 +1,22 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useTheme } from '@mui/material/styles';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-import Tooltip from '@mui/material/Tooltip';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
+import {
+  Box,
+  Toolbar,
+  Typography,
+  Tooltip,
+  Table,
+  TableBody,
+  TableContainer,
+  TableHead,
+  TableFooter,
+  TableRow,
+  Paper,
+  TablePagination,
+  Button,
+} from '@mui/material/';
 import TableCell, { tableCellClasses } from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
-import TableFooter from '@mui/material/TableFooter';
-import TablePagination from '@mui/material/TablePagination';
-import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import FirstPageIcon from '@mui/icons-material/FirstPage';
 import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
@@ -32,7 +34,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
   },
 }));
 
-const EnhancedTableToolbar = (props) => {
+const EnhancedTableToolbar = ({ totalOrders }) => {
   return (
     <Toolbar
       sx={{
@@ -49,14 +51,16 @@ const EnhancedTableToolbar = (props) => {
         id="tableTitle"
         component="div"
       >
-        商品管理
+        訂單管理
       </Typography>
-
-      <Tooltip title="Filter list">
-        <Button variant="contained" href="/admin/products/add">
-          新增
-        </Button>
-      </Tooltip>
+      <Typography
+        sx={{ flex: '1 1 100%', textAlign: 'right' }}
+        variant="h6"
+        id="tableTitle"
+        component="div"
+      >
+        訂單總數：{totalOrders}
+      </Typography>
     </Toolbar>
   );
 };
@@ -129,12 +133,13 @@ TablePaginationActions.propTypes = {
   rowsPerPage: PropTypes.number.isRequired,
 };
 
-export default function ProductsTable({ products, handleProductStatus }) {
+export default function ProductsTable({ orders }) {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
+  const totalOrders = orders.length;
 
   const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - products.length) : 0;
+    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - orders.length) : 0;
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -147,95 +152,44 @@ export default function ProductsTable({ products, handleProductStatus }) {
 
   return (
     <>
-      <EnhancedTableToolbar />
+      <EnhancedTableToolbar totalOrders={totalOrders} />
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 680 }} aria-label="table">
           <TableHead>
             <TableRow>
-              <StyledTableCell>商品圖片</StyledTableCell>
               <StyledTableCell align="left">ID</StyledTableCell>
-              <StyledTableCell align="left">商品名稱</StyledTableCell>
-              <StyledTableCell align="right">價格</StyledTableCell>
-              <StyledTableCell align="right">類別</StyledTableCell>
-              <StyledTableCell align="right">是否上架</StyledTableCell>
-              <StyledTableCell align="right">庫存</StyledTableCell>
-              <StyledTableCell align="right">賣出</StyledTableCell>
+              <StyledTableCell align="left">訂單編號</StyledTableCell>
+              <StyledTableCell align="right">總價</StyledTableCell>
+              <StyledTableCell align="right">狀態</StyledTableCell>
+              <StyledTableCell align="right">會員ID</StyledTableCell>
               <StyledTableCell align="center">操作</StyledTableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {(rowsPerPage > 0
-              ? products.slice(
+              ? orders.slice(
                   page * rowsPerPage,
                   page * rowsPerPage + rowsPerPage
                 )
-              : products
+              : orders
             ).map((row) => (
               <TableRow
                 key={row.id}
                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
               >
-                <TableCell component="th" scope="row">
-                  {row.url ? (
-                    <div
-                      style={{
-                        display: 'block',
-                        width: '220px',
-                        height: '140px',
-                        maxWidth: '220px',
-                        overflow: 'hidden',
-                        background: '#e8e8e8',
-                      }}
-                    >
-                      <img src={row.url} alt="" style={{ width: '100%' }} />
-                    </div>
-                  ) : (
-                    <div
-                      style={{
-                        display: 'block',
-                        width: '220px',
-                        height: '160px',
-                        maxWidth: '220px',
-                        background: '#e8e8e8',
-                      }}
-                    ></div>
-                  )}
-                </TableCell>
                 <TableCell align="left">{row.id}</TableCell>
-                <TableCell align="left">{row.productName}</TableCell>
-                <TableCell align="right">{row.price}</TableCell>
-                <TableCell align="right">{row.type}</TableCell>
-                <TableCell align="right">{row.isShow ? '是' : '否'}</TableCell>
-                <TableCell align="right">
-                  {row.storage > 0 ? row.storage : '-'}
-                </TableCell>
-                <TableCell align="right">
-                  {row.sell > 0 ? row.sell : '-'}
-                </TableCell>
+                <TableCell align="left">{row.orderid}</TableCell>
+                <TableCell align="right">{row.totalPrice}</TableCell>
+                <TableCell align="right">{row.status}</TableCell>
+                <TableCell align="right">{row.userId}</TableCell>
                 <TableCell align="right">
                   <Button
                     variant="contained"
-                    href={`/admin/products/${row.id}`}
+                    href={`/admin/orders/${row.id}`}
                     sx={{ mr: 1 }}
                   >
-                    編輯
+                    查看
                   </Button>
-                  {row.isShow === 1 && (
-                    <Button
-                      variant="outlined"
-                      onClick={() => handleProductStatus(row.id, '0')}
-                    >
-                      下架
-                    </Button>
-                  )}
-                  {row.isShow === 0 && (
-                    <Button
-                      variant="outlined"
-                      onClick={() => handleProductStatus(row.id, '1')}
-                    >
-                      上架
-                    </Button>
-                  )}
                 </TableCell>
               </TableRow>
             ))}
@@ -250,7 +204,7 @@ export default function ProductsTable({ products, handleProductStatus }) {
               <TablePagination
                 rowsPerPageOptions={[10, 25, { label: 'All', value: -1 }]}
                 colSpan={8}
-                count={products.length}
+                count={orders.length}
                 rowsPerPage={rowsPerPage}
                 page={page}
                 SelectProps={{
