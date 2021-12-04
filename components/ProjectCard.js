@@ -6,6 +6,10 @@ import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import { Button, CardActionArea, CardActions } from '@mui/material';
 import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
+import Link from 'next/link';
+
+// 商品彈窗
+import AlertProductDialog from './AlertProductDialog'
 
 const CakeCard = styled(Card)`
   height: unset;
@@ -28,38 +32,40 @@ export default function ProjectCard({ cake }) {
             p: 2,
           }}
         >
-          <CardActionArea>
-            <CardMedia
-              component="img"
-              image={cake.url || 'https://i.imgur.com/fQPBsoF.jpeg'}
-              alt="green iguana"
-              sx={{ height: { xs: 150, sm: 380, md: 450 } }}
-            />
-            <CardContent
-              sx={{
-                height: 'unset',
-                minHeight: 100,
-              }}
-            >
-              <Typography
-                gutterBottom
-                variant="body"
-                component="div"
-                sx={{ textAlign: 'center' }}
+          <Link href={`/products/${cake.productid}`}>
+            <CardActionArea>
+              <CardMedia
+                component="img"
+                image={cake.url || 'https://i.imgur.com/fQPBsoF.jpeg'}
+                alt="green iguana"
+                sx={{ height: { xs: 150, sm: 380, md: 450 } }}
+              />
+              <CardContent
+                sx={{
+                  height: 'unset',
+                  minHeight: 100,
+                }}
               >
-                {cake.productName}
-              </Typography>
-              <Typography
-                variant="body2"
-                color="text.secondary"
-                sx={{ textAlign: 'center' }}
-              >
-                {`NT$${cake.price}`}
-              </Typography>
-            </CardContent>
-          </CardActionArea>
+                <Typography
+                  gutterBottom
+                  variant="body"
+                  component="div"
+                  sx={{ textAlign: 'center' }}
+                >
+                  {cake.productName}
+                </Typography>
+                <Typography
+                  variant="body2"
+                  color="text.secondary"
+                  sx={{ textAlign: 'center' }}
+                >
+                  {`NT$${cake.price}`}
+                </Typography>
+              </CardContent>
+            </CardActionArea>
+          </Link>
           <CardActions sx={{ p: 0 }}>
-            <Button
+            {/* <Button
               size="small"
               variant="outlined"
               color="primary"
@@ -71,9 +77,24 @@ export default function ProjectCard({ cake }) {
                 m: 0,
                 borderRadius: 1,
               }}
+              onClick={handleClickCart}
             >
               <ShoppingCartOutlinedIcon />
-            </Button>
+            </Button> */}
+            <AlertProductDialog
+              cake={cake}
+              size="small"
+              variant="outlined"
+              color="primary"
+              sx={{
+                mx: 'auto',
+                width: '100%',
+                height: '32px',
+                p: 1,
+                m: 0,
+                borderRadius: 1,
+              }}
+            />
           </CardActions>
         </Card>
       )}

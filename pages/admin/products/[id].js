@@ -122,7 +122,7 @@ export const getStaticProps = async (content) => {
       productData: productData.result[0],
       photosData: photosData.result,
     },
-    revalidate: 60,
+    revalidate: 1,
   };
 };
 
@@ -136,6 +136,6 @@ export const getStaticPaths = async () => {
 
   return {
     paths,
-    fallback: false,
+    fallback: 'blocking',
   };
 };

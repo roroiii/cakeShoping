@@ -45,6 +45,7 @@ export const getStaticProps = async () => {
       props: {
         productAndOnePhoto: productAndOnePhoto,
       },
+      revalidate: 1,
     };
   } else {
     return {

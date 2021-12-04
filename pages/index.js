@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useContext, createContext, useRef, useEffect } from 'react';
 import Meta from '../components/Meta';
 import Card from '@mui/material/Card';
 import CardMedia from '@mui/material/CardMedia';
@@ -40,7 +40,7 @@ export default function Home({ productAndOnePhoto }) {
         }}
       >
         {productAndOnePhoto.map((cake) => (
-          <ProjectCard key={cake.id} cake={cake} />
+          <ProjectCard key={cake.id} cake={cake}/>
         ))}
       </Box>
     </div>
