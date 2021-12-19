@@ -93,7 +93,7 @@ export default function Nav() {
             <p>加入會員</p>
           </MenuItem>
         </Link>
-        <Link href={`/member`}>
+        <Link href={`/login`}>
           <MenuItem>
             <IconButton
               size="small"
@@ -106,7 +106,7 @@ export default function Nav() {
             >
               <PersonOutlineOutlinedIcon />
             </IconButton>
-            <p>會員中心</p>
+            <p>會員登入</p>
           </MenuItem>
         </Link>
         <CartDrawer />
@@ -155,7 +155,7 @@ export default function Nav() {
           <p>加入會員</p>
         </MenuItem>
       </Link>
-      <Link href={`/member`}>
+      {/* <Link href={`/member`}>
         <MenuItem>
           <IconButton
             size="small"
@@ -170,7 +170,7 @@ export default function Nav() {
           </IconButton>
           <p>會員中心</p>
         </MenuItem>
-      </Link>
+      </Link> */}
     </Menu>
   );
 

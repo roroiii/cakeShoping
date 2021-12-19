@@ -17,7 +17,7 @@ export default function Home({ productAndOnePhoto }) {
           <CardMedia
             component="img"
             height="auto"
-            image="https://picsum.photos/1200"
+            image="./img/2200x.webp"
             alt="green iguana"
           />
         </Card>
@@ -54,6 +54,7 @@ export const getStaticProps = async () => {
       props: {
         productAndOnePhoto: productAndOnePhoto,
       },
+      revalidate: 1,
     };
   } else {
     return {

@@ -98,7 +98,7 @@ export default function CartDrawer() {
           aria-haspopup="true"
           color="inherit"
         >
-          <Badge badgeContent={17} color="error">
+          <Badge badgeContent={count} color="error">
             <ShoppingCartOutlinedIcon />
           </Badge>
         </IconButton>
@@ -115,7 +115,7 @@ export default function CartDrawer() {
           aria-haspopup="true"
           color="inherit"
         >
-          <Badge badgeContent={count} color="error">
+          <Badge badgeContent={count} color="error" sx={{ fontSize: '16px'}}>
             <ShoppingCartOutlinedIcon />
             <p>購物車</p>
             {/* 可以把他移下去 */}

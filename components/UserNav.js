@@ -74,7 +74,7 @@ export default function UserNav() {
             <p>關於我們</p>
           </MenuItem>
         </Link>
-        <Link href={`/member`}>
+        {/* <Link href={`/member`}>
           <MenuItem>
             <IconButton
               size="small"
@@ -89,7 +89,7 @@ export default function UserNav() {
             </IconButton>
             <p>會員中心</p>
           </MenuItem>
-        </Link>
+        </Link> */}
         <CartDrawer />
 
         <MenuItem onClick={handleLogout}>
@@ -127,7 +127,7 @@ export default function UserNav() {
           <p>關於我們</p>
         </MenuItem>
       </Link>
-      <Link href={`/member`}>
+      {/* <Link href={`/member`}>
         <MenuItem>
           <IconButton
             size="small"
@@ -142,7 +142,7 @@ export default function UserNav() {
           </IconButton>
           <p>會員中心</p>
         </MenuItem>
-      </Link>
+      </Link> */}
       <MenuItem onClick={handleLogout}>
         <IconButton
           size="small"
