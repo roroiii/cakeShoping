@@ -183,7 +183,7 @@ export default function SignUp() {
             </Button>
 
             <Grid container justifyContent="flex-end">
-              <Link href={`/`} >
+              <Link href={`/login`} >
                 <a style={{ fontSize: '1rem' }} >已有帳號？點此登入！！</a>
               </Link>
             </Grid>

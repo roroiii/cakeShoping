@@ -23,10 +23,11 @@ export default function Product() {
   const [sell, setSell] = useState(0);
   const [photos, setPhotos] = useState('');
 
-  const handleAddProduct = async (data) => {
+  const handleAddProduct = async (data, id) => {
     addProduct(data).then((res) => {
       console.log(res);
     });
+    if(id) router.push(`/admin/products/${id}`);
     router.push('/admin/products');
   };
   const handleDeletePhoto = (id) => {
