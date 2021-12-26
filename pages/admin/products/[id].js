@@ -58,6 +58,7 @@ export default function Product({ productData, photosData }) {
 
   const handleUpdateProduct = async (data) => {
     updateProduct(data);
+    console.log(data)
     router.reload();
   };
 
@@ -69,8 +70,13 @@ export default function Product({ productData, photosData }) {
     }
   };
   const handleDeleteProduct = (id) => {
-    deleteProduct(id);
-    router.push('/admin/products');
+    let deleteMessage = window.confirm('確定刪除商品？')
+    if (deleteMessage) {
+      deleteProduct(id);
+      router.push('/admin/products');
+    }
+    
+    
   };
   const handleIsShowClick = (e) => {
     setIsShow(e.target.checked);

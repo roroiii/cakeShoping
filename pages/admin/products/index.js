@@ -24,6 +24,10 @@ export default function Products({ productAndOnePhoto }) {
     setProducts(products.filter((product) => product.isDeleted !== 1));
   }, []);
 
+  useEffect(() => {
+    setProducts(products.filter((product) => product.isDeleted !== 1));
+  },[products])
+
   return (
     <>
       {adminUser.role === 'admin' ? (
