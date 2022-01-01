@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import ProductItem from '../../../components/ProductItem';
 import Updating from '../../../components/Updating';
 import {
@@ -34,17 +34,16 @@ export default function Product({ productData, photosData }) {
   const { id } = router.query;
   if (!id) return <></>;
 
-  const handleUploadFile = (e) => {
+  const handleUploadFile = async (e) => {
     let fromData = new FormData();
     for (let i = 0; i < e.target.files.length; i++) {
       fromData.append('avatar', e.target.files[i]);
     }
     fromData.append('productId', id);
     setIsUpdating(true);
-    addNewPhoto(fromData).then((res) => {
+    await addNewPhoto(fromData).then((res) => {
       if (!res) {
         setIsUpdating(false);
-        console.log(res);
         return setErrorMessage(true);
       }
       if (res.statusText === 'OK') {
@@ -57,22 +56,24 @@ export default function Product({ productData, photosData }) {
   };
 
   const handleUpdateProduct = async (data) => {
-    updateProduct(data);
-    console.log(data)
-    router.reload();
+    await updateProduct(data);
+    const res = await updateProduct(data);
+    if(res.data.ok === 1) {
+      router.reload();
+    }
   };
 
-  const handleDeletePhoto = (id) => {
+  const handleDeletePhoto = async (id) => {
     let deleteMessage = window.confirm('確定刪除圖片？');
     if (deleteMessage) {
       setPhotos(photos.filter((photo) => photo.id !== id));
-      deletePhoto(id);
+      await deletePhoto(id);
     }
   };
-  const handleDeleteProduct = (id) => {
+  const handleDeleteProduct = async (id) => {
     let deleteMessage = window.confirm('確定刪除商品？')
     if (deleteMessage) {
-      deleteProduct(id);
+      await deleteProduct(id);
       router.push('/admin/products');
     }
     
@@ -81,6 +82,22 @@ export default function Product({ productData, photosData }) {
   const handleIsShowClick = (e) => {
     setIsShow(e.target.checked);
   };
+
+  const getProductData = async () => {
+    const res = await getProduct(id);
+    const productData = await res.data.result[0]
+    return productData
+  }
+
+  const getPhotosData = async () => {
+    const photosData = await getPhoto(id);
+    return photosData.data.result
+  }
+
+  useEffect(() => {
+    getProductData()
+    getPhotosData()
+  },[])
 
   return (
     <>

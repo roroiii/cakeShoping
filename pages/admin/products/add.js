@@ -1,15 +1,9 @@
 import { useState } from 'react';
 import ProductItem from '../../../components/ProductItem';
 import {
-  getProducts,
-  getProduct,
-  getPhoto,
   deletePhoto,
-  deleteProduct,
-  updateProduct,
   addProduct,
 } from '../../api/webAPI';
-import { server } from '../../../config';
 import { useRouter } from 'next/router';
 
 export default function Product() {
@@ -23,16 +17,18 @@ export default function Product() {
   const [sell, setSell] = useState(0);
   const [photos, setPhotos] = useState('');
 
-  const handleAddProduct = async (data, id) => {
+  const handleAddProduct = (data, id) => {
     addProduct(data).then((res) => {
-      console.log(res);
+      if(res.data.id) {
+        router.push(`/admin/products/${res.data.id}`);
+      }
     });
     if(id) router.push(`/admin/products/${id}`);
-    router.push('/admin/products');
+
   };
-  const handleDeletePhoto = (id) => {
+  const handleDeletePhoto = async (id) => {
     setPhotos(photos.filter((photo) => photo.id !== id));
-    deletePhoto(id);
+    await deletePhoto(id);
   };
   const handleIsShowClick = (e) => {
     setIsShow(e.target.checked);

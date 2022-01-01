@@ -1,37 +1,23 @@
-import { useState, useEffect } from 'react';
 import useSWR from "swr";
 import { useRouter } from 'next/router';
 import ProductsTable from '../../../components/ProductsTable';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { selectAdminUser } from '../../../features/adminUserSlice';
-import {
-  getProductsAndOnePhoto,
-  productOnAndOffStatus,
-} from '../../../pages/api/webAPI';
+import { productOnAndOffStatus } from '../../../pages/api/webAPI';
 import NotFound from '../../../components/NotFound';
-import {server} from "../../../config/index"
+import { server } from "../../../config/index"
 
 const fetcher = (url) =>
   fetch(`${server}${url}`).then((res) => res.json());
 
-
-
-export default function Products({ productAndOnePhoto }) {
+export default function Products() {
   const adminUser = useSelector(selectAdminUser);
-  const dispatch = useDispatch();
   const router = useRouter();
-  const [products, setProducts] = useState([]);
 
   const handleProductStatus = (id, status) => {
     productOnAndOffStatus(id, status);
     router.reload();
   };
-
-  // const { data: productsA } = useSWR("/product", fetcher);
-  // const { data: photoA } = useSWR("/photo", fetcher);
-  // if (!productsA && !photoA) return <div>loading</div>;
-  // console.log(productsA.result)
-  // console.log(photoA)
 
   const { data: productsA } = useSWR("/product", fetcher);
   const { data: photoA } = useSWR("/photo", fetcher);
@@ -52,15 +38,8 @@ export default function Products({ productAndOnePhoto }) {
       console.log(error.message);
     }
   };
-  console.log(getProductsAndOnePhoto())
-
-// console.log(getProductsAndOnePhoto())
 
 const aaa = getProductsAndOnePhoto()
-
-  // useEffect(() => {
-  //   setProducts(products.filter((product) => product.isDeleted !== 1));
-  // }, []);
 
   return (
     <>
@@ -76,20 +55,20 @@ const aaa = getProductsAndOnePhoto()
   );
 }
 
-export const getStaticProps = async () => {
-  const productAndOnePhoto = await getProductsAndOnePhoto();
-  if (productAndOnePhoto) {
-    return {
-      props: {
-        productAndOnePhoto: productAndOnePhoto,
-      },
-      revalidate: 1,
-    };
-  } else {
-    return {
-      props: {
-        productAndOnePhoto: null,
-      },
-    };
-  }
-};
+// export const getStaticProps = async () => {
+//   const productAndOnePhoto = await getProductsAndOnePhoto();
+//   if (productAndOnePhoto) {
+//     return {
+//       props: {
+//         productAndOnePhoto: productAndOnePhoto,
+//       },
+//       revalidate: 1,
+//     };
+//   } else {
+//     return {
+//       props: {
+//         productAndOnePhoto: null,
+//       },
+//     };
+//   }
+// };

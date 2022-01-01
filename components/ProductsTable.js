@@ -220,7 +220,12 @@ export default function ProductsTable({ products, handleProductStatus }) {
                   >
                     編輯
                   </Button>
-                  {row.isShow === 1 && (
+                  {row.isShow === 1 ? (
+                    <TableCell align="right">已上架</TableCell>
+                  ) : (
+                    <TableCell align="right">已下架</TableCell>
+                  )}
+                  {/* {row.isShow === 1 && (
                     <Button
                       variant="outlined"
                       onClick={() => handleProductStatus(row.id, '0')}
@@ -235,7 +240,7 @@ export default function ProductsTable({ products, handleProductStatus }) {
                     >
                       上架
                     </Button>
-                  )}
+                  )} */}
                 </TableCell>
               </TableRow>
             ))}
