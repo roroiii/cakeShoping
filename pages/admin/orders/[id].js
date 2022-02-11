@@ -37,7 +37,6 @@ export default function Order({}) {
     const url = location.href.split('/')[5];
     getOrderUUID(url);
   }, []);
-  console.log(order);
 
   return (
     <>

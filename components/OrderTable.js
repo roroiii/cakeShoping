@@ -180,7 +180,9 @@ export default function ProductsTable({ orders }) {
                 <TableCell align="left">{row.id}</TableCell>
                 <TableCell align="left">{row.orderid}</TableCell>
                 <TableCell align="right">{row.totalPrice}</TableCell>
-                <TableCell align="right">{row.status}</TableCell>
+                <TableCell align="right">
+                  {row.status === '0' ? '未完成' : '已完成'}
+                </TableCell>
                 <TableCell align="right">{row.userId}</TableCell>
                 <TableCell align="right">
                   <Button
