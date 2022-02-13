@@ -9,7 +9,6 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Slide from '@mui/material/Slide';
 import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
 
-
 // 這頁只放彈窗的邏輯，畫面在這
 import AlertCard from './AlertCard'
 
@@ -42,7 +41,7 @@ export default function AlertProductDialog({ cake }) {
         maxWidth='md'
       >
         <DialogContent>
-          <AlertCard cake={cake} />
+          <AlertCard cake={cake} handleClose={handleClose} />
         </DialogContent>
       </Dialog>
     </>

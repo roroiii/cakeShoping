@@ -19,13 +19,14 @@ import Badge from '@mui/material/Badge';
 
 import { useCartContext } from '../context/CartContext'
 
-export default function AlertCard({ cake }) {
+export default function AlertCard({ cake, handleClose }) {
   const theme = useTheme();
   const [count, setCount] = useState(1)
   const { handleAddToCart } = useCartContext();
   function handleClick() {
     console.log('新增到購物車，按鈕在 AlertCard')
     handleAddToCart(cake, count)
+    handleClose()
   }
 
   return (

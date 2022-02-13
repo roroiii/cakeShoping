@@ -7,20 +7,9 @@ export function AppWrapper({ children }) {
   const [cart, setCart] = useState([])
   const [totalPrice, setTotalPrice] = useState()
   const cartId = useRef(1)
-  // const [paymentInfo, setPaymentInfo] = useState(
-  //   {
-  //     "totalPrice": 0,
-  //     "name": "", 
-  //     "phone": "", 
-  //     "address": "", 
-  //     "email": "", 
-  //     "productList": []
-  //   }
-  // )
   
   // 每次重整從 local 拿 cart 資料，將 cartId 數量更新到正確
   useEffect(() => {
-    console.log('重整 in context')
     setCart(JSON.parse(getCartFromLocalStorage()) || [])
     
     const local = JSON.parse(getCartFromLocalStorage())
@@ -45,7 +34,6 @@ export function AppWrapper({ children }) {
   //   return [cart, setCart];
   // }, [cart, setCart]);
   
-  // 商品加到購物車
   const handleAddToCart = (productInfo, count) => {
     const { productid, productName, price, url }  = productInfo
     const OriginCart = cart
@@ -85,9 +73,9 @@ export function AppWrapper({ children }) {
     // 要注意的事情，加入前，先檢查是否有加入過，用 product id 去檢查
     // 每次回到頁面前，將 localStorage 的資料先放進 cart state 裡面，可以放在 function 裡面，每次加入就先執行
   }
-  
-  // 從購物車中移除
+
   const handleRemoveFromCart = (CartId) => {
+    // 從購物車中移除
     // 一定是在購物車裡面。所以用 filter 吧
     // 做完要改變 cart state 以及 localStorage 
     const OriginCart = cart
@@ -124,7 +112,7 @@ export function AppWrapper({ children }) {
         handleRemoveFromCart,
         totalPrice, 
         setTotalPrice,
-        handleChangeCountFromCart,
+        handleChangeCountFromCart
       }}>
       {children}
     </CartContext.Provider>

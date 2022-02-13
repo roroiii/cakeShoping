@@ -37,7 +37,11 @@ export default function CartDrawer() {
 
   // Nav 購物車的數量
   useEffect(() => {
-    setCount(cart.length)
+    let total = 0
+    cart.forEach(element  => {
+      total += element.count
+    })
+    setCount(total)
   }, [cart])
 
   const toggleDrawer = (anchor, open) => (event) => {
@@ -66,7 +70,7 @@ export default function CartDrawer() {
         ))}
       </List>
       {/* 可以放總金額組件 */}
-      <Link href={`/cart`}>
+      <Link href={`/checkout`}>
         <Button
           variant="outlined"
           sx={{
@@ -80,7 +84,6 @@ export default function CartDrawer() {
           訂單結帳
         </Button>
       </Link>
-
     </Box>
   );
 

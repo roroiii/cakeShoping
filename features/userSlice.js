@@ -40,6 +40,26 @@ export const userLogin = (router, payload) => (dispatch) => {
     });
 };
 
+export const userCheckoutLogin = (router, payload) => (dispatch) => {
+  return loginAPI(payload)
+    .then((res) => {
+      const data = {
+        username: payload.username,
+        role: res.data.role,
+      };
+      if (res.data.ok === 1) {
+        setAuthToken(res.data.token);
+        dispatch(setUser(data));
+        dispatch(getUser());
+        router.push('/checkout');
+      }
+      return res;
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
+
 export const logout = () => async (dispatch) => {
   dispatch(setUserLogout());
   setAuthToken('');

@@ -65,22 +65,6 @@ export default function ProjectCard({ cake }) {
             </CardActionArea>
           </Link>
           <CardActions sx={{ p: 0 }}>
-            {/* <Button
-              size="small"
-              variant="outlined"
-              color="primary"
-              sx={{
-                mx: 'auto',
-                width: '100%',
-                height: '32px',
-                p: 1,
-                m: 0,
-                borderRadius: 1,
-              }}
-              onClick={handleClickCart}
-            >
-              <ShoppingCartOutlinedIcon />
-            </Button> */}
             <AlertProductDialog
               cake={cake}
               size="small"

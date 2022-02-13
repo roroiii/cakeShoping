@@ -59,11 +59,11 @@ export default function SiglePage() {
 
   return (
     <ThemeProvider theme={theme}>
-      <Container sx={{ background:'#7e7e7e', width:'90vw', padding:5 }} component="main">
-        <Grid container spacing={2} sx={{ width: '100%' }} >
+      <Container sx={{  width:'90vw', padding:5 }} component="main">
+        <Grid container spacing={2} sx={{ width: '100%', height: '450px'}}>
 
           {/* 左區塊：圖片 */}
-          <Grid item xs={12} md={6} sx={{ height: '450px' }}>
+          <Grid item xs={12} md={6} sx={{ height: '450px'}}>
             <Paper 
               sx={{ 
                 padding: '5px',
@@ -77,13 +77,16 @@ export default function SiglePage() {
           </Grid>
 
           {/* 右區塊：詳細資料 */}
-          <Grid item xs={12} md={6}>
-            <Grid container 
-              sx={{ 
-                height: '450px',
-                padding: '50px'
-              }}>
-              <Grid item md={12}>
+          <Grid 
+            item 
+            container
+            direction="column"
+            justifyContent="space-between"
+            spacing={1}
+            xs={12} md={6}>
+
+              {/* 名稱、價錢 */}
+              <Grid item >
                 <Typography variant="h5" component="div">
                   {product.productName}
                 </Typography>
@@ -92,11 +95,13 @@ export default function SiglePage() {
                 </Typography>
               </Grid>
 
-              <Grid item md={12}>
+              {/* 數量、按鈕 */}
+              <Grid item >
                 <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
                   尚有庫存
                 </Typography>
 
+                {/* 更改數量 */}
                 <ButtonGroup fullWidth>
                   <Button
                     sx={{ 
@@ -123,38 +128,44 @@ export default function SiglePage() {
                   </Button>
                 </ButtonGroup>
 
-                <Button variant="contained" size="small" fullWidth sx={{ mt: 3, mb: 3}}
-                  onClick={handleClick}
-                >
-                  加入購物車</Button>
-                <Button variant="contained" size="small" fullWidth  
-                  onClick={() => console.log(cart)}  >
-                  直接購買
-                </Button>
-
+                <Grid item>
+                  <Button variant="contained" size="small" fullWidth color="info"
+                    sx={{ 
+                      // mt: 3, mb: 3
+                    }}
+                    onClick={handleClick}
+                  >
+                    加入購物車</Button>
+                </Grid>
+                <Grid item>
+                  <Button variant="contained" size="small" fullWidth  
+                    onClick={() => console.log(cart)}  >
+                    直接購買
+                  </Button>
+                </Grid>
               </Grid>
-            </Grid>
 
           </Grid>
+        </Grid>
 
-          {/* 下面區塊：詳細商品描述 */}
-          <Grid item xs={12} md={12}>
-            <Paper sx={{ background: 'white', padding: '20px', height: '500px'}} >
-              <Typography variant="h5" mt="2" >
-                商品介紹：
-              </Typography>
-              <Typography sx={{ textAlign:'center' }}>
-                {product.articlel}
-              </Typography>
-            </Paper>
-          </Grid>
 
-          {/* 推薦商品 */}
-          <Grid item xs={12} md={12}>
-            <Paper sx={{ background: 'white', padding: '20px', height: '250px' }} >
-              推薦商品
-            </Paper>
-          </Grid>
+        {/* 下面區塊：詳細商品描述 */}
+        <Grid item xs={12} md={12}>
+          <Paper sx={{ background: 'white', padding: '20px', height: '500px'}} >
+            <Typography variant="h5" mt="2" >
+              商品介紹：
+            </Typography>
+            <Typography sx={{ textAlign:'center', whiteSpace:'pre-wrap' }}>
+              {product.articlel}
+            </Typography>
+          </Paper>
+        </Grid>
+
+        {/* 推薦商品 */}
+        <Grid item xs={12} md={12}>
+          <Paper sx={{ background: 'white', padding: '20px', height: '250px' }} >
+            推薦商品
+          </Paper>
         </Grid>
 
       </Container>

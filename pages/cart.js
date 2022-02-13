@@ -24,11 +24,11 @@ export default function BasicTable() {
     <>
       <TableContainer component={Paper}>
         <Table sx={{ width: 750 }} aria-label="simple table">
-          <TableHead>
+          {/* <TableHead>
             <TableRow>
               <TableCell>購物車資料</TableCell>
             </TableRow>
-          </TableHead>
+          </TableHead> */}
           <TableHead>
             <TableRow>
               <TableCell>商品名稱</TableCell>
@@ -82,7 +82,6 @@ export default function BasicTable() {
           </TableBody>
         </Table>
       </TableContainer>
-      
     </>
   );
 }
