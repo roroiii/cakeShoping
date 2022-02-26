@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useState, useEffect }  from 'react';
+import { useState, useEffect } from 'react';
 import CssBaseline from '@mui/material/CssBaseline';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
@@ -49,7 +49,7 @@ function StepContent() {
     case 0:
       return <AddressForm />;
     case 1:
-      return <PaymentForm  />;
+      return <PaymentForm />;
     case 2:
       return <Review />;
     default:
@@ -59,59 +59,65 @@ function StepContent() {
 
 const theme = createTheme();
 
-export default function Checkout() {
+export default function checkout() {
   // const user = useSelector(selectUser); // user.role 身分
   // const dispatch = useDispatch();
 
   const [activeStep, setActiveStep] = useState(0);
-  const [errorMessage, setErrorMessage] = useState()
+  const [errorMessage, setErrorMessage] = useState();
 
-  const { 
-    cart, 
-    setCart, 
-    cartId, 
+  const {
+    cart,
+    setCart,
+    cartId,
     handleAddToCart,
     handleRemoveFromCart,
-    totalPrice, 
+    totalPrice,
     setTotalPrice,
     handleChangeCountFromCart,
-    orderInfo, setOrderInfo, handleAddOrderProductList, handleOrderPaymentForm,  formData, setFormData, handleRemoveCheckout
+    orderInfo,
+    setOrderInfo,
+    handleAddOrderProductList,
+    handleOrderPaymentForm,
+    formData,
+    setFormData,
+    handleRemoveCheckout,
   } = useCartContext();
 
   // 管理下一步，應該要在這驗證第二步有沒有驗證
   // ## 做判斷在這做吧
   const handleNext = () => {
-    console.log('handleNext')
-    console.log('cart ===', cart)
-    console.log('orderInfo ===', orderInfo)
-    
+    console.log('handleNext');
+    console.log('cart ===', cart);
+    console.log('orderInfo ===', orderInfo);
+
     if (activeStep === 0) {
-      handleAddOrderProductList()   // # context
-    } 
+      handleAddOrderProductList(); // # context
+    }
     // if (activeStep === 1) {
     // 表單驗證
     // }
     if (activeStep === 2) {
       postOrder(orderInfo);
-      postOrder(orderInfo).then(response => {
-        // 成功訊息判斷
-        // if (response.ok === 0) {
-        //   return setErrorMessage(response.message)
-        // }
-        // history.push("/")
-        handleRemoveCheckout()
-      })
-      .catch((err) => {
-        // setIsLoading(false)
-        // return setErrorMessage(err.message)
-        console.log('失敗 err = ', err)
-      })
-
+      postOrder(orderInfo)
+        .then((response) => {
+          // 成功訊息判斷
+          // if (response.ok === 0) {
+          //   return setErrorMessage(response.message)
+          // }
+          // history.push("/")
+          handleRemoveCheckout();
+        })
+        .catch((err) => {
+          // setIsLoading(false)
+          // return setErrorMessage(err.message)
+          console.log('失敗 err = ', err);
+        });
     }
-    setErrorMessage('')
-    setActiveStep(activeStep + 1);   
+    setErrorMessage('');
+    setActiveStep(activeStep + 1);
   };
-  
+
   const handleBack = () => {
     setErrorMessage('');
     setActiveStep(activeStep - 1);
@@ -145,7 +151,7 @@ export default function Checkout() {
                 </Typography>
                 <Link href={`/`}>
                   <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-                    <Button variant="contained" sx={{ mt: 3, ml: 1 }} >
+                    <Button variant="contained" sx={{ mt: 3, ml: 1 }}>
                       回到首頁
                     </Button>
                   </Box>
@@ -153,8 +159,11 @@ export default function Checkout() {
               </React.Fragment>
             ) : (
               <React.Fragment>
-
-                { errorMessage && <Alert  sx={{ width: '100%' }} severity="error">{errorMessage}</Alert> }
+                {errorMessage && (
+                  <Alert sx={{ width: '100%' }} severity="error">
+                    {errorMessage}
+                  </Alert>
+                )}
                 {/* 一到三步驟詳細頁面資訊 */}
                 {getStepContent(activeStep)}
 
