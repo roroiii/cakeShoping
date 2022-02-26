@@ -20,24 +20,38 @@ import { useCartContext } from '../../context/CartContext';
 import { postOrder, getUser } from '../api/webAPI';
 
 // 身分
-import { useDispatch, useSelector } from 'react-redux';
-import { selectUser } from '../../features/userSlice';
+// import { useDispatch, useSelector } from 'react-redux';
+// import { selectUser } from '../../features/userSlice';
 
 // 都成功，返回首頁
 import Link from 'next/link';
 
 const steps = ['購物車確認', '寄送資料填寫', '訂單確認'];
 
-function getStepContent(step, orderData) {
+function getStepContent(step) {
   switch (step) {
     case 0:
-      return <AddressForm orderData={orderData} />;
+      return <AddressForm />;
     case 1:
-      return <PaymentForm  orderData={orderData} />;
+      return <PaymentForm />;
     case 2:
-      return <Review orderData={orderData} />;
-    case 9:
-      return <CheckLogin orderData={orderData} />;
+      return <Review />;
+    // case 9:
+    //   return <CheckLogin orderData={orderData} />;
+    default:
+      throw new Error('Unknown step');
+  }
+}
+
+// 傳 訂單內容、表單
+function StepContent() {
+  switch (step) {
+    case 0:
+      return <AddressForm />;
+    case 1:
+      return <PaymentForm  />;
+    case 2:
+      return <Review />;
     default:
       throw new Error('Unknown step');
   }
@@ -46,110 +60,60 @@ function getStepContent(step, orderData) {
 const theme = createTheme();
 
 export default function Checkout() {
-  // 身分
-  const user = useSelector(selectUser); // user.role 身分
-  const dispatch = useDispatch();
+  // const user = useSelector(selectUser); // user.role 身分
+  // const dispatch = useDispatch();
 
   const [activeStep, setActiveStep] = useState(0);
-  const { cart, totalPrice } = useCartContext();
-  const [orderInfo, setOrderInfo] = useState({  // 最後要送出的訂單
-    "totalPrice": 0,
-    "name": "", 
-    "phone": "", 
-    "address": "", 
-    "email": "", 
-    "productList": ['原始陣列']
-  });
-  const [formDate, setFormData] = useState({
-    "name": '', 
-    "phone": '', 
-    "address": '', 
-    "email": '', 
-  })
   const [errorMessage, setErrorMessage] = useState()
-  
-  // 塞第一步資料：將 cart 塞入 productList 中，「cart」 與 order 同步
-  const setOrderProductList = () =>  {
-    const cartToOrder = []
-    cart.map(item => {
-      let cartItem = {
-        "productId": item.productid,
-        "count": item.count,
-        "unitPrice": item.price
-      }
-      cartToOrder.push(cartItem)
-    })
-    
-    setOrderInfo({
-      ...orderInfo,
-      "totalPrice": totalPrice,
-      "productList" : cartToOrder
-    })
-  }
 
-  // 驗證第二步資料：
-  const validateForm = (formDate) => {
-    console.log('沒有全部填寫')
-    const { name, address, phone, email } = formDate
-    if (name === '' || address === '' || phone === '' || email === '') {
-      setErrorMessage('請輸入每個欄位喲！')
-      return false
-    }
-    setErrorMessage('')
-    return true
-  }
-
-  // 塞第二步資料：
-  const handleOrderPaymentForm = (formDate) => {
-    console.log('log 第二步')
-    const { name, address, phone, email } = formDate
-    setOrderInfo({
-      ...orderInfo,
-      name,
-      phone,
-      address,
-      email
-    })
-  };
-
-  const orderData = { orderInfo, setOrderInfo, setOrderProductList, formDate, setFormData }
-
-  const handleCheckLogin = () => {
-    if (user.role !== 'user') {
-      console.log('尚未登入1')
-      console.log(activeStep)
-      setActiveStep(9);
-      return
-    } 
-    console.log('已登入')
-  }
+  const { 
+    cart, 
+    setCart, 
+    cartId, 
+    handleAddToCart,
+    handleRemoveFromCart,
+    totalPrice, 
+    setTotalPrice,
+    handleChangeCountFromCart,
+    orderInfo, setOrderInfo, handleAddOrderProductList, handleOrderPaymentForm,  formData, setFormData, handleRemoveCheckout
+  } = useCartContext();
 
   // 管理下一步，應該要在這驗證第二步有沒有驗證
+  // ## 做判斷在這做吧
   const handleNext = () => {
+    console.log('handleNext')
+    console.log('cart ===', cart)
+    console.log('orderInfo ===', orderInfo)
+    
     if (activeStep === 0) {
-      if (user.role !== 'user') {
-        console.log('尚未登入1')
-        setActiveStep(9);
-        return
-      } else {
-        setActiveStep(0);
-      }
-      setOrderProductList()
+      handleAddOrderProductList()   // # context
     } 
-    if (activeStep === 1) {
-      if (!validateForm(formDate)) return // 簡單的判斷
-      handleOrderPaymentForm(formDate)
-    }
+    // if (activeStep === 1) {
+    // 表單驗證
+    // }
     if (activeStep === 2) {
-      console.log('送出訂單')
-      postOrder(orderInfo)
+      postOrder(orderInfo);
+      postOrder(orderInfo).then(response => {
+        // 成功訊息判斷
+        // if (response.ok === 0) {
+        //   return setErrorMessage(response.message)
+        // }
+        // history.push("/")
+        handleRemoveCheckout()
+      })
+      .catch((err) => {
+        // setIsLoading(false)
+        // return setErrorMessage(err.message)
+        console.log('失敗 err = ', err)
+      })
+
     }
     setErrorMessage('')
-    setActiveStep(activeStep + 1);
+    setActiveStep(activeStep + 1);   
   };
-
+  
   const handleBack = () => {
-    setErrorMessage('')
+    setErrorMessage('');
     setActiveStep(activeStep - 1);
   };
 
@@ -192,7 +156,7 @@ export default function Checkout() {
 
                 { errorMessage && <Alert  sx={{ width: '100%' }} severity="error">{errorMessage}</Alert> }
                 {/* 一到三步驟詳細頁面資訊 */}
-                {getStepContent(activeStep, orderData)}
+                {getStepContent(activeStep)}
 
                 <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
                   {activeStep !== 0 && (

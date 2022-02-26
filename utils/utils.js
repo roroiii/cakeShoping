@@ -1,4 +1,5 @@
 const CART_NAME = 'cart'
+const CHECKOUT_NAME = 'checkout'
 
 // 將 product 加入 localStorage
 export const addCartToLocalStorage = (productItems) => {
@@ -8,6 +9,14 @@ export const addCartToLocalStorage = (productItems) => {
 // 從 localStorage 拿出 cart
 export const getCartFromLocalStorage = () => {
   return localStorage.getItem(CART_NAME)
+}
+
+export const addCheckoutDataToLocalStorage = (checkoutData) => {
+  localStorage.setItem(CHECKOUT_NAME, JSON.stringify(checkoutData))
+}
+
+export const getCheckoutDataFromLocalStorage = () => {
+  return localStorage.getItem(CHECKOUT_NAME)
 }
 // const localCart = JSON.parse(getItemsFromLocalStorage())
 // let isProductInCart = localCart

@@ -65,7 +65,7 @@ export default function SignUp() {
     if (!validateRegister()) return
 
     registerApi(username, password, realname, email, phone).then(data => {
-      console.log(data)
+      console.log('registerApi data ===', data)
       if (data.ok === 0) {
         return setErrorMessage(data.message)
       }

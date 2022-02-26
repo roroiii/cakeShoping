@@ -155,6 +155,7 @@ export const deletePhoto = async (id) => {
 };
 
 export const getProductsAndOnePhoto = async () => {
+  // console.log('進來 getProductsAndOnePhoto')
   try {
     const { data: products } = await getProducts();
     const { data: photos } = await getAllPhotos();
@@ -163,7 +164,7 @@ export const getProductsAndOnePhoto = async () => {
       ...photos.result.find((photo) => product.id === photo.productid),
       ...product,
     }));
-
+    // console.log('info = ', info)
     return info;
   } catch (error) {
     console.log(error.message);
@@ -304,7 +305,6 @@ export const getOneProductImg = async (id) => {
 }
 
 export const postOrder = async (data) => {
-  console.log('webAPI 送出訂單')
   try {
     const token = getAuthToken();
     const res = await axios({

@@ -11,12 +11,12 @@ import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
 import { useCartContext } from '../../context/CartContext';
 
-export default function PaymentForm({orderData}) {
-  const { formDate, setFormData } = orderData
-  const [addressName, setAddressName] = useState(formDate.name)
-  const [address, setAddress] = useState(formDate.address)
-  const [phone, setPhone] = useState(formDate.phone)
-  const [email, setEmail] = useState(formDate.email)
+export default function PaymentForm() {
+  const { setFormData, orderInfo, setOrderInfo, handleOrderPaymentForm } = useCartContext();
+  const [addressName, setAddressName] = useState('')
+  const [address, setAddress] = useState('')
+  const [phone, setPhone] = useState('')
+  const [email, setEmail] = useState('')
 
   // 除了商品外的其他訊息
   useEffect(() => {
@@ -27,6 +27,10 @@ export default function PaymentForm({orderData}) {
       "email": email, 
     })
   }, [addressName, address, phone, email])
+
+  function handleInput(e) {
+    handleOrderPaymentForm()
+  }
 
   return (
     <React.Fragment>
@@ -44,6 +48,7 @@ export default function PaymentForm({orderData}) {
               fullWidth
               autoComplete="cc-name"
               variant="standard"
+              onBlur={handleInput}
               onChange={e => setAddressName(e.target.value)}
             />
           </Grid>
@@ -56,6 +61,7 @@ export default function PaymentForm({orderData}) {
               fullWidth
               autoComplete="cc-number"
               variant="standard"
+              onBlur={handleInput}
               onChange={e => setPhone(e.target.value)}
             />
           </Grid>
@@ -68,6 +74,7 @@ export default function PaymentForm({orderData}) {
               fullWidth
               autoComplete="cc-exp"
               variant="standard"
+              onBlur={handleInput}
               onChange={e => setEmail(e.target.value)}
             />
           </Grid>
@@ -81,6 +88,7 @@ export default function PaymentForm({orderData}) {
               fullWidth
               autoComplete="cc-csc"
               variant="standard"
+              onBlur={handleInput}
               onChange={e => setAddress(e.target.value)}
             />
           </Grid>

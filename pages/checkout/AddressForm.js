@@ -11,7 +11,7 @@ import Box from '@mui/material/Box';
 import { useCartContext } from '../../context/CartContext';
 import CheckoutCartItem from '../../components/CheckoutCartItem';
 
-export default function AddressForm({orderData}) {
+export default function AddressForm() {
   const { cart, totalPrice } = useCartContext();
 
   return (
