@@ -16,6 +16,7 @@ import RemoveIcon from '@mui/icons-material/Remove';
 import AddIcon from '@mui/icons-material/Add';
 import Badge from '@mui/material/Badge';
 import ButtonGroup from '@mui/material/ButtonGroup';
+import Link from 'next/link';
 
 const theme = createTheme();
 
@@ -133,15 +134,19 @@ export default function SiglePage() {
                     sx={{ 
                       // mt: 3, mb: 3
                     }}
-                    onClick={handleClick}
+                    onClick={ handleClick }
                   >
                     加入購物車</Button>
                 </Grid>
                 <Grid item>
-                  <Button variant="contained" size="small" fullWidth  
-                    onClick={() => console.log(cart)}  >
-                    直接購買
-                  </Button>
+
+                  <Link href={`/checkout`}>
+                    <Button variant="contained" size="small" fullWidth  
+                      onClick={ handleClick }  >
+                      直接購買
+                    </Button>
+                  </Link>
+
                 </Grid>
               </Grid>
 

@@ -309,7 +309,7 @@ export const postOrder = async (data) => {
     const token = getAuthToken();
     const res = await axios({
       method: 'POST',
-      url: `${server}/order/`,
+      url: `${server}/order`,
       headers: {
         authorization: token,
       },
@@ -317,6 +317,9 @@ export const postOrder = async (data) => {
     });
     return res;
   } catch (error) {
-    console.log(error.message);
+    if (error.response){
+      return error.response
+    }
+    return error
   }
 };

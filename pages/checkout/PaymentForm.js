@@ -12,7 +12,7 @@ import FormLabel from '@mui/material/FormLabel';
 import { useCartContext } from '../../context/CartContext';
 
 export default function PaymentForm() {
-  const { setFormData, orderInfo, setOrderInfo, handleOrderPaymentForm } = useCartContext();
+  const { formData, setFormData, orderInfo, setOrderInfo, handleOrderPaymentForm } = useCartContext();
   const [addressName, setAddressName] = useState('')
   const [address, setAddress] = useState('')
   const [phone, setPhone] = useState('')
@@ -27,6 +27,13 @@ export default function PaymentForm() {
       "email": email, 
     })
   }, [addressName, address, phone, email])
+
+  useEffect(() => {
+    setAddressName(formData.name)
+    setAddress(formData.address)
+    setPhone(formData.phone)
+    setEmail(formData.email)
+  }, [])
 
   function handleInput(e) {
     handleOrderPaymentForm()

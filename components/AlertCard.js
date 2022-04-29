@@ -17,13 +17,15 @@ import RemoveIcon from '@mui/icons-material/Remove';
 import AddIcon from '@mui/icons-material/Add';
 import Badge from '@mui/material/Badge';
 
+import Link from 'next/link';
+
 import { useCartContext } from '../context/CartContext'
 
 export default function AlertCard({ cake, handleClose }) {
   const theme = useTheme();
   const [count, setCount] = useState(1)
   const { handleAddToCart } = useCartContext();
-  function handleClick() {
+  function handleClickAddCart() {
     console.log('新增到購物車，按鈕在 AlertCard')
     handleAddToCart(cake, count)
     handleClose()
@@ -77,8 +79,12 @@ export default function AlertCard({ cake, handleClose }) {
         </Box>
 
         <Box sx={{ display: 'flex', alignItems: 'center',justifyContent: 'center',pl: 1, pb: 1 }}>
-          <Button onClick={ handleClick }>加到購物車</Button>
-          <Button onClick={() => console.log('直接購買')}>直接購買</Button>
+          <Button onClick={ handleClickAddCart }>加到購物車</Button>
+          
+          <Link href={`/checkout`}>
+            <Button onClick={ handleClickAddCart }>直接購買</Button>
+          </Link>
+
         </Box>
       </Box>
     </Card>
